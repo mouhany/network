@@ -1,24 +1,36 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-
-    <h2>Login</h2>
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+    <div class="containter px-5">
+        <!-- Login and register page -->
+        <div class="row justify-content-center align-items-center">
+            <div class="col-auto">
+                <a href="/"
+                    class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none h1">netw<i
+                        class="bi bi-globe2 small"></i>rk</a>
+            </div>
+            <div class="text-center p-5 col-xl-4 offset-xl-1 col-auto">
+                <h2 class="mb-4 comfortaa">Login</h2>
+                
+                {% if message %}
+                <div>{{ message }}</div>
+                {% endif %}
+                
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" name="password" placeholder="Password">
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Login">
+                </form>
+                
+                Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+            </div>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
-
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    </div>
+    
 
 {% endblock %}

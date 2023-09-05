@@ -2,15 +2,106 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <title>{% block title %}Social Network{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
-    </head>
-    <body>
+        
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+        
+        <!-- Font -->
+        <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
+        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+
+        {% block script %}
+        {% endblock %}
+
+    </head>
+
+    <body>
+        <div class="container px-5">
+            <!-- {% if user.is_authenticated %} -->
+            <!-- Main page -->
+            <!-- Sidebar -->
+            <div class="px-4 pt-5 col-lg-3">
+                <a href="/" class="text-center align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none fs-2 fw-bold">netw<i class="bi bi-globe2 small"></i>rk</a>
+                <hr>
+                <!-- New post (modal) -->
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary text-center" id="compose" data-content="compose-view">
+                        New Post
+                    </button>
+                </div>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <!-- All post -->
+                    <li class="nav-item">
+                        <a href="#" id="all" data-content="all-view" class="nav-link link-body-emphasis active sb"
+                            aria-current="page">
+                            <!-- <i class="bi bi-people-fill"></i> -->
+                            All post
+                        </a>
+                    </li>
+                    {% if user.is_authenticated%}
+                    <!-- Following -->
+                    <li>
+                        <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
+                            <!-- <i class="bi bi-person-fill-check"></i> -->
+                            Following
+                        </a>
+                    </li>
+                    <!-- Profile -->
+                    <li>
+                        <a href="#" id="profile" data-content="profile-view" class="nav-link link-body-emphasis sb">
+                            Profile
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <!-- Log out -->
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li>
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                            <strong>Sign in as {{ user.username }}</strong>
+                        </button>
+                        <div id="dashboard-collapse" class="collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal ms-2">
+                                <li><a href="{% url 'logout' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-1">Log Out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                {% else %}
+                <!-- Log in -->
+                <li>
+                    <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
+                        <!-- <i class="bi bi-person-fill-check"></i> -->
+                        Login
+                    </a>
+                </li>
+                <!-- Register -->
+                <li>
+                    <a href="#" id="profile" data-content="profile-view" class="nav-link link-body-emphasis sb">
+                        Register
+                    </a>
+                </li>
+                {% endif %}
+            </div>
+            <!-- {% else %} -->
+            
+            <!-- {% endif %} -->
+        </div>
+
+
+        <nav class="p-3 navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand comfortaa" href="#">netw<i class="bi bi-globe2 small"></i>rk</a>
           
             <div>
               <ul class="navbar-nav mr-auto">
@@ -39,7 +130,7 @@
                 {% endif %}
               </ul>
             </div>
-          </nav>
+        </nav>
         
         <div class="body">
             {% block body %}
