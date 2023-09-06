@@ -1,30 +1,61 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+    <div class="px-5">
+        <div class="row justify-content-center align-items-center">
 
-    <h2>Register</h2>
+            <div class="col-auto">
+                <a href="/" class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none display-1 fw-bold">
+                    <i class="fa-solid fa-globe"></i>
+                </a>
+            </div>
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+            <div class="text-center p-5 col-xl-4 col-auto">
 
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+                <form action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 mb-4">
+                        <a href="{% url 'register' %}" class="h4 comfortaa">Register</a>
+
+                        {% if message %}
+                            <div class="small text-muted opacity-50">{{ message }}</div>
+                        {% endif %}
+
+                        <div class="form-outline">
+                            <input type="text" autocomplete="off" id="un" class="form-control shadow-sm" name="username"/>
+                            <label class="form-label" for="un">Username</label>
+                        </div>
+
+                        <div class="form-outline">
+                            <input type="email" autocomplete="off" id="e" class="form-control shadow-sm" name="email" />
+                            <label class="form-label" for="e">Email Address</label>
+                        </div>
+
+                        <div class="form-outline">
+                            <input type="password" id="pw" class="form-control shadow-sm" name="username" />
+                            <label class="form-label" for="pw">Password</label>
+                        </div>
+
+                        <div class="form-outline">
+                            <input type="password" id="pw" class="form-control shadow-sm" name="username" />
+                            <label class="form-label" for="pw">Confirm Password</label>
+                        </div>
+                        <!-- <input class="form-control" type="text" name="username" placeholder="Username">
+                        <input class="form-control" type="email" name="email" placeholder="Email Address">
+                        <input class="form-control" type="password" name="password" placeholder="Password">
+                        <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                        <input class="btn btn-light btn-rounded shadow-sm text-center" type="submit" value="Register"> -->
+                        <input class="btn btn-light btn-rounded shadow-sm text-center" type="submit" value="Register">
+                    </div>
+                </form>
+
+                <div class="small">
+                    Already have an account?
+                    <br>
+                    <a href="{% url 'login' %}">Log In.</a>
+                </div>
+                
+            </div>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email Address">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Register">
-    </form>
-
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
-
+    </div>
 {% endblock %}

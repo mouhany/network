@@ -2,18 +2,22 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <title>{% block title %}Social Network{% endblock %}</title>
         
         <!-- Bootstrap -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script> -->
+
+        <!-- Bootstrap icon -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-            crossorigin="anonymous"></script>
+
+        <!-- MDB -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
         
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
         <!-- Font -->
         <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
 
@@ -25,116 +29,118 @@
     </head>
 
     <body>
-        <div class="container px-5">
-            <!-- {% if user.is_authenticated %} -->
-            <!-- Main page -->
-            <!-- Sidebar -->
-            <div class="px-4 pt-5 col-lg-3">
-                <a href="/" class="text-center align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none fs-2 fw-bold">netw<i class="bi bi-globe2 small"></i>rk</a>
-                <hr>
-                <!-- New post (modal) -->
-                <div class="d-grid gap-2">
-                    <button class="btn btn-primary text-center" id="compose" data-content="compose-view">
-                        New Post
-                    </button>
-                </div>
-                <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <!-- All post -->
-                    <li class="nav-item">
-                        <a href="#" id="all" data-content="all-view" class="nav-link link-body-emphasis active sb"
-                            aria-current="page">
-                            <!-- <i class="bi bi-people-fill"></i> -->
-                            All post
-                        </a>
-                    </li>
-                    {% if user.is_authenticated%}
-                    <!-- Following -->
-                    <li>
-                        <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
-                            <!-- <i class="bi bi-person-fill-check"></i> -->
-                            Following
-                        </a>
-                    </li>
-                    <!-- Profile -->
-                    <li>
-                        <a href="#" id="profile" data-content="profile-view" class="nav-link link-body-emphasis sb">
-                            Profile
-                        </a>
-                    </li>
-                </ul>
-                <hr>
-                <!-- Log out -->
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li>
-                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                            <strong>Sign in as {{ user.username }}</strong>
+        <div class="container p-5">
+            <div class="row">
+
+                <!-- Sidebar -->
+                <div class="px-4 pt-5 col-lg-3">
+                    <a href="/" class="h4 text-center align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none fs-2 fw-bold">netw<i class="fa-solid fa-globe h4"></i>rk</a>
+                    <hr>
+                    {% if user.is_authenticated %}
+                    <!-- New post button (modal) -->
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary text-center" id="compose" data-content="compose-view">
+                            New Post
                         </button>
-                        <div id="dashboard-collapse" class="collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal ms-2">
-                                <li><a href="{% url 'logout' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-1">Log Out</a>
+                    </div>
+                    {% else %}
+                    <!-- Login and register button -->
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'login' %}" class="btn btn-light btn-rounded shadow-sm text-center">Log In</a>
+                        <a href="{% url 'register' %}" class="btn btn-light btn-rounded shadow-sm text-center">Register</a>
+                    </div>
+                    {% endif %}
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <!-- All post -->
+                        <li class="nav-item">
+                            <a href="{% url 'index' %}" id="all" data-content="all-view" class="nav-link link-body-emphasis active sb"
+                                aria-current="page">
+                                <!-- <i class="bi bi-people-fill"></i> -->
+                                All post
+                            </a>
+                        </li>
+                        {% if user.is_authenticated%}
+                        <!-- Following -->
+                        <li>
+                            <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
+                                <!-- <i class="bi bi-person-fill-check"></i> -->
+                                Following
+                            </a>
+                        </li>
+                        <!-- Likes -->
+                        <li>
+                            <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
+                                <!-- <i class="bi bi-person-fill-check"></i> -->
+                                Likes
+                            </a>
+                        </li>
+                        <!-- Profile -->
+                        <li>
+                            <a href="#" id="profile" data-content="profile-view" class="nav-link link-body-emphasis sb">
+                                Profile
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <!-- Log out -->
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li>
+                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                                data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                                <strong>Sign in as {{ user.username }}</strong>
+                            </button>
+                            <div id="dashboard-collapse" class="collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal ms-2">
+                                    <li><a href="{% url 'logout' %}"
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-1">Log Out</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <!-- <nav class="p-3 navbar navbar-expand-lg navbar-light bg-light">
+                            <a class="navbar-brand comfortaa" href="#">network</a>
+                            <div>
+                                <ul class="navbar-nav mr-auto">
+                                {% if user.is_authenticated %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
+                                    </li>
+                                {% endif %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
                                 </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-                {% else %}
-                <!-- Log in -->
-                <li>
-                    <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
-                        <!-- <i class="bi bi-person-fill-check"></i> -->
-                        Login
-                    </a>
-                </li>
-                <!-- Register -->
-                <li>
-                    <a href="#" id="profile" data-content="profile-view" class="nav-link link-body-emphasis sb">
-                        Register
-                    </a>
-                </li>
-                {% endif %}
+                                {% if user.is_authenticated %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Following</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                                    </li>
+                                {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                                    </li>
+                                {% endif %}
+                                </ul>
+                            </div>
+                        </nav> -->
+                
+                <!-- Body -->
+                <div class="body">
+                    <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</p>
+                    {% block body %}
+                    {% endblock %}
+                </div>
+</div>
             </div>
-            <!-- {% else %} -->
-            
-            <!-- {% endif %} -->
-        </div>
-
-
-        <nav class="p-3 navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand comfortaa" href="#">netw<i class="bi bi-globe2 small"></i>rk</a>
-          
-            <div>
-              <ul class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                </li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Following</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                {% endif %}
-              </ul>
-            </div>
-        </nav>
-        
-        <div class="body">
-            {% block body %}
-            {% endblock %}
         </div>
     </body>
 </html>

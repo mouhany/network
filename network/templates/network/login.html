@@ -1,36 +1,48 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="containter px-5">
-        <!-- Login and register page -->
+    <div class="px-5">
         <div class="row justify-content-center align-items-center">
+
             <div class="col-auto">
-                <a href="/"
-                    class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none h1">netw<i
-                        class="bi bi-globe2 small"></i>rk</a>
+                <a href="/"class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none display-1 fw-bold">
+                    <i class="fa-solid fa-globe"></i>
+                </a>
             </div>
-            <div class="text-center p-5 col-xl-4 offset-xl-1 col-auto">
-                <h2 class="mb-4 comfortaa">Login</h2>
-                
-                {% if message %}
-                <div>{{ message }}</div>
-                {% endif %}
-                
+
+            <div class="text-center p-5 col-xl-4 col-auto">
+
                 <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+                    <div class="d-grid gap-2 mb-4">
+                        <a href="{% url 'login' %}" class="h4 comfortaa">Log In</a>
+
+                        {% if message %}
+                            <div class="small text-muted opacity-50">{{ message }}</div>
+                        {% endif %}
+
+                        <div class="form-outline">
+                            <input type="text" autocomplete="off" id="un" class="form-control shadow-sm" name="username"/>
+                            <label class="form-label" for="un">Username</label>
+                        </div>
+                        
+                        <div class="form-outline">
+                            <input type="password" id="pw" class="form-control shadow-sm" name="password"/>
+                            <label class="form-label" for="pw">Password</label>
+                        </div>
+                        <!-- <input autofocus class="form-control" type="text" name="username" placeholder="Username"> -->
+                        <!-- <input class="form-control" type="password" name="password" placeholder="Password"> -->
+                        <input class="btn btn-light btn-rounded shadow-sm text-center" type="submit" value="Log In">
                     </div>
-                    <div class="form-group">
-                        <input class="form-control" type="password" name="password" placeholder="Password">
-                    </div>
-                    <input class="btn btn-primary" type="submit" value="Login">
                 </form>
                 
-                Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+                <div class="small">
+                    Don't have an account?
+                    <br>
+                    <a href="{% url 'register' %}">Register.</a>
+                </div>
+                
             </div>
         </div>
     </div>
-    
-
 {% endblock %}
