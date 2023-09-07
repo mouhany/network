@@ -3,18 +3,16 @@
 {% block body %}
     <div class="px-5">
         <div class="row justify-content-center align-items-center">
-
             <div class="col-auto">
                 <a href="/" class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none display-1 fw-bold">
                     <i class="fa-solid fa-globe"></i>
                 </a>
             </div>
 
-            <div class="text-center p-5 col-xl-4 col-auto">
-
+            <div class="text-center px-5 col-auto">
                 <form action="{% url 'register' %}" method="post">
                     {% csrf_token %}
-                    <div class="d-grid gap-2 mb-4">
+                    <div class="d-grid gap-3 mb-5">
                         <a href="{% url 'register' %}" class="h4 comfortaa">Register</a>
 
                         {% if message %}
@@ -22,39 +20,33 @@
                         {% endif %}
 
                         <div class="form-outline">
-                            <input type="text" autocomplete="off" id="un" class="form-control shadow-sm" name="username"/>
+                            <input type="text" autocomplete="off" id="un" class="btn-rounded form-control shadow-sm" name="username"/>
                             <label class="form-label" for="un">Username</label>
                         </div>
 
                         <div class="form-outline">
-                            <input type="email" autocomplete="off" id="e" class="form-control shadow-sm" name="email" />
+                            <input type="email" autocomplete="off" id="e" class="btn-rounded form-control shadow-sm" name="email" />
                             <label class="form-label" for="e">Email Address</label>
                         </div>
 
                         <div class="form-outline">
-                            <input type="password" id="pw" class="form-control shadow-sm" name="username" />
+                            <input type="password" id="pw" class="btn-rounded form-control shadow-sm" name="password" />
                             <label class="form-label" for="pw">Password</label>
                         </div>
 
                         <div class="form-outline">
-                            <input type="password" id="pw" class="form-control shadow-sm" name="username" />
-                            <label class="form-label" for="pw">Confirm Password</label>
+                            <input type="password" id="cf" class="btn-rounded form-control shadow-sm" name="confirmation" />
+                            <label class="form-label" for="cf">Confirm Password</label>
                         </div>
-                        <!-- <input class="form-control" type="text" name="username" placeholder="Username">
-                        <input class="form-control" type="email" name="email" placeholder="Email Address">
-                        <input class="form-control" type="password" name="password" placeholder="Password">
-                        <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-                        <input class="btn btn-light btn-rounded shadow-sm text-center" type="submit" value="Register"> -->
-                        <input class="btn btn-light btn-rounded shadow-sm text-center" type="submit" value="Register">
+
+                        <input class="btn btn-primary btn-rounded shadow-sm text-center" type="submit" value="Register">
                     </div>
                 </form>
 
-                <div class="small">
-                    Already have an account?
-                    <br>
-                    <a href="{% url 'login' %}">Log In.</a>
+                <div>
+                    <div class="small">Already have an account?</div>
+                    <a href="{% url 'login' %}" class="text-center">Log In</a>
                 </div>
-                
             </div>
         </div>
     </div>

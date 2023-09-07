@@ -14,6 +14,7 @@
 
         <!-- MDB -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
         
         <!-- Font Awesome -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -29,117 +30,48 @@
     </head>
 
     <body>
-        <div class="container p-5">
-            <div class="row">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
 
                 <!-- Sidebar -->
                 <div class="px-4 pt-5 col-lg-3">
-                    <a href="/" class="h4 text-center align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none fs-2 fw-bold">netw<i class="fa-solid fa-globe h4"></i>rk</a>
+                    <a href="/" class="h3 text-center align-middle comfortaa d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none fw-bold">netw<i class="fa-solid fa-globe h5"></i>rk</a>
                     <hr>
                     {% if user.is_authenticated %}
                     <!-- New post button (modal) -->
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary text-center" id="compose" data-content="compose-view">
+                        <button class="btn btn-secondary btn-rounded shadow-sm text-center" id="compose" data-content="compose-view">
                             New Post
                         </button>
                     </div>
                     {% else %}
-                    <!-- Login and register button -->
+                    <!-- Login and register button (modal) -->
                     <div class="d-grid gap-2">
-                        <a href="{% url 'login' %}" class="btn btn-light btn-rounded shadow-sm text-center">Log In</a>
-                        <a href="{% url 'register' %}" class="btn btn-light btn-rounded shadow-sm text-center">Register</a>
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-rounded shadow-sm text-center">Register</a>
+                        <a href="{% url 'login' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log In</a>
                     </div>
                     {% endif %}
                     <hr>
-                    <ul class="nav nav-pills flex-column mb-auto">
-                        <!-- All post -->
-                        <li class="nav-item">
-                            <a href="{% url 'index' %}" id="all" data-content="all-view" class="nav-link link-body-emphasis active sb"
-                                aria-current="page">
-                                <!-- <i class="bi bi-people-fill"></i> -->
-                                All post
-                            </a>
-                        </li>
-                        {% if user.is_authenticated%}
-                        <!-- Following -->
-                        <li>
-                            <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
-                                <!-- <i class="bi bi-person-fill-check"></i> -->
-                                Following
-                            </a>
-                        </li>
-                        <!-- Likes -->
-                        <li>
-                            <a href="#" id="follwing" data-content="following-view" class="nav-link link-body-emphasis sb">
-                                <!-- <i class="bi bi-person-fill-check"></i> -->
-                                Likes
-                            </a>
-                        </li>
-                        <!-- Profile -->
-                        <li>
-                            <a href="#" id="profile" data-content="profile-view" class="nav-link link-body-emphasis sb">
-                                Profile
-                            </a>
-                        </li>
-                    </ul>
-                    <hr>
-                    <!-- Log out -->
-                    <ul class="nav nav-pills flex-column mb-auto">
-                        <li>
-                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                                data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                                <strong>Sign in as {{ user.username }}</strong>
-                            </button>
-                            <div id="dashboard-collapse" class="collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal ms-2">
-                                    <li><a href="{% url 'logout' %}"
-                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-1">Log Out</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                    {% endif %}
+                    <!-- all post following likes profile -->
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">All Posts</a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Following</a>
+                        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
+                        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Profile</a>
+                        <hr>
+                        <a href="{% url 'logout' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log Out</a>
+                        {% endif %}
+                    </div>
                 </div>
-
-                <!-- <nav class="p-3 navbar navbar-expand-lg navbar-light bg-light">
-                            <a class="navbar-brand comfortaa" href="#">network</a>
-                            <div>
-                                <ul class="navbar-nav mr-auto">
-                                {% if user.is_authenticated %}
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
-                                    </li>
-                                {% endif %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                                </li>
-                                {% if user.is_authenticated %}
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Following</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                                    </li>
-                                {% else %}
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                                    </li>
-                                {% endif %}
-                                </ul>
-                            </div>
-                        </nav> -->
                 
                 <!-- Body -->
-                <div class="body">
-                    <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</p>
+                <!-- <div class="body"> -->
+                <div class="px-4 pt-5 col-lg-9">
                     {% block body %}
                     {% endblock %}
                 </div>
-</div>
+                    
             </div>
         </div>
     </body>
