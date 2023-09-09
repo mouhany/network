@@ -16,10 +16,8 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
         
-        <!-- Font Awesome -->
+        <!-- Fonts  -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-
-        <!-- Font -->
         <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
 
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
@@ -47,8 +45,8 @@
                     {% else %}
                     <!-- Login and register button (modal) -->
                     <div class="d-grid gap-2">
-                        <a href="{% url 'register' %}" class="btn btn-primary btn-rounded shadow-sm text-center">Register</a>
-                        <a href="{% url 'login' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log In</a>
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-rounded shadow-sm text-center" data-mdb-toggle="modal" data-mdb-target="#register">Register</a>
+                        <a href="{% url 'login' %}" class="btn btn-secondary btn-rounded shadow-sm text-center" data-mdb-toggle="modal" data-mdb-target="#login">Log In</a>
                     </div>
                     {% endif %}
                     <hr>
@@ -64,14 +62,132 @@
                         {% endif %}
                     </div>
                 </div>
-                
+
                 <!-- Body -->
-                <!-- <div class="body"> -->
                 <div class="px-4 pt-5 col-lg-9">
                     {% block body %}
                     {% endblock %}
                 </div>
-                    
+
+                <!-- Register modal -->
+                <div class="modal top fade" id="register" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                    data-mdb-backdrop="true" data-mdb-keyboard="true">
+                    <div class="modal-dialog modal-lg  modal-dialog-centered">
+                        <div class="modal-content">
+                
+                            <div class="p-5">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-auto">
+                                        <a href="/"
+                                            class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none display-1 fw-bold">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </a>
+                                    </div>
+                
+                                    <div class="text-center px-5 col-auto">
+                                        <form action="{% url 'register' %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="d-grid gap-3 mb-5">
+                                                <a href="{% url 'register' %}" class="h4 comfortaa">Register</a>
+                
+                                                {% if message %}
+                                                <div class="small text-muted opacity-50">{{ message }}</div>
+                                                {% endif %}
+                
+                                                <div class="form-outline">
+                                                    <input type="text" autocomplete="off" id="un"
+                                                        class="btn-rounded form-control shadow-sm" name="username" />
+                                                    <label class="form-label" for="un">Username</label>
+                                                </div>
+                
+                                                <div class="form-outline">
+                                                    <input type="email" autocomplete="off" id="e"
+                                                        class="btn-rounded form-control shadow-sm" name="email" />
+                                                    <label class="form-label" for="e">Email Address</label>
+                                                </div>
+                
+                                                <div class="form-outline">
+                                                    <input type="password" id="pw" class="btn-rounded form-control shadow-sm"
+                                                        name="password" />
+                                                    <label class="form-label" for="pw">Password</label>
+                                                </div>
+                
+                                                <div class="form-outline">
+                                                    <input type="password" id="cf" class="btn-rounded form-control shadow-sm"
+                                                        name="confirmation" />
+                                                    <label class="form-label" for="cf">Confirm Password</label>
+                                                </div>
+                
+                                                <input class="btn btn-primary btn-rounded shadow-sm text-center" type="submit"
+                                                    value="Register">
+                                            </div>
+                                        </form>
+                
+                                        <div>
+                                            <div class="small">Already have an account?</div>
+                                            <a href="{% url 'login' %}" class="text-center">Log In</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+                    </div>
+                </div>
+                <!-- Login modal -->
+                <div class="modal top fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                    data-mdb-backdrop="true" data-mdb-keyboard="true">
+                    <div class="modal-dialog modal-lg  modal-dialog-centered">
+                        <div class="modal-content">
+                
+                            <div class="p-5">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-auto">
+                                        <a href="/"
+                                            class="align-middle comfortaa px-3 d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none display-1 fw-bold">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </a>
+                                    </div>
+                
+                                    <div class="text-center px-5 col-auto">
+                                        <form action="{% url 'login' %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="d-grid gap-3 mb-5">
+                                                <a href="{% url 'login' %}" class="h4 comfortaa">Log In</a>
+                
+                                                {% if message %}
+                                                <div class="small text-muted opacity-50">{{ message }}</div>
+                                                {% endif %}
+                
+                                                <div class="form-outline">
+                                                    <input type="text" autocomplete="off" id="un"
+                                                        class="btn-rounded form-control shadow-sm" name="username" />
+                                                    <label class="form-label" for="un">Username</label>
+                                                </div>
+                
+                                                <div class="form-outline">
+                                                    <input type="password" id="pw" class="btn-rounded form-control shadow-sm"
+                                                        name="password" />
+                                                    <label class="form-label" for="pw">Password</label>
+                                                </div>
+                
+                                                <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit"
+                                                    value="Log In">
+                                            </div>
+                                        </form>
+                
+                                        <div>
+                                            <div class="small">Don't have an account?</div>
+                                            <a href="{% url 'register' %}" class="text-center">Register</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </body>
