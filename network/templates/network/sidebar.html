@@ -1,0 +1,40 @@
+<!-- Sidebar -->
+<div class="px-4 pt-5 col-lg-3">
+
+    <a href="/" class="h3 text-center align-middle comfortaa d-inline-block link-body-emphasis text-decoration-none link-body-emphasis text-decoration-none fw-bold">
+        netw<i class="fa-solid fa-globe h5"></i>rk
+    </a>
+
+    <hr>
+
+    {% if user.is_authenticated %}
+    <!-- New post button (modal) -->
+    <div class="d-grid gap-2">
+        <button class="btn btn-secondary btn-rounded shadow-sm text-center" id="compose" data-content="compose-view">
+            New Post
+        </button>
+    </div>
+    {% else %}
+    <!-- Login and register button (modal) -->
+    <div class="d-grid gap-2">
+        <a href="{% url 'register' %}" class="btn btn-primary btn-rounded shadow-sm text-center" data-mdb-toggle="modal"
+            data-mdb-target="#register">Register</a>
+        <a href="{% url 'login' %}" class="btn btn-secondary btn-rounded shadow-sm text-center" data-mdb-toggle="modal"
+            data-mdb-target="#login">Log In</a>
+    </div>
+    {% endif %}
+
+    <hr>
+
+    <!-- All posts, Following, Likes, Profile -->
+    <div class="d-grid gap-2">
+        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">All Posts</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Following</a>
+        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
+        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Profile</a>
+        <hr>
+        <a href="{% url 'logout' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log Out</a>
+        {% endif %}
+    </div>
+</div>
