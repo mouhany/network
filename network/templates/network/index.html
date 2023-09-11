@@ -4,8 +4,51 @@
 
     {% include "network/sidebar.html" %}
 
-    <div class="px-4 pt-5 col-lg-9">
-        TODO
+    <div class="px-4 pt-5 col-lg-9 col-md-8 col-sm-7">
+
+        <!-- 
+        content = models.CharField(max_length=255)
+        poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
+        likers = models.ManyToManyField(User, blank=True, related_name="likes")
+        date_posted = models.DateTimeField(auto_now_add=True)
+        edited = models.BooleanField(default=False)
+        -->
+
+        {% for post in posts %}
+        <div class="p-3 border">
+            <div>{{ post.poster }} </div>
+            <div>{{ post.content }} </div>
+            <div>{{ post.num_of_likes }} likes</div>
+            <div>{{ post.date_posted }}</div>
+        </div>
+        {% endfor %}
+
     </div>
+
+    <!-- New post modal -->
+    <div class="modal top fade" id="newpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog modal-lg  modal-dialog-centered">
+            <div class="modal-content">
     
+                <div class="p-5">
+                    <div class="px-5 col-auto">
+                        <form action="{% url 'create' %}" method="post">
+                            {% csrf_token %}
+                            <div class="d-grid gap-3">
+
+                                <div class="form-outline">
+                                    <textarea class="form-control shadow-sm" id="content" rows="2" name="content"></textarea>
+                                    <label class="form-label" for="content">What's happening?</label>
+                                </div>
+
+                                <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit" value="Post">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
