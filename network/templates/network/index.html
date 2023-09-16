@@ -4,8 +4,12 @@
 
     {% include "network/sidebar.html" %}
 
-    <div class="px-4 pt-5 col-lg-9 col-md-8 col-sm-7">
-
+    <!-- Main -->
+    {% if not user.is_authenticated %}
+    <div class="col-lg-9 col-md-8 col-sm-7">
+    {% else %}
+    <div class="col-lg-7 col-md-6 col-sm-5">
+    {% endif %}
         <!-- 
         content = models.CharField(max_length=255)
         poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
@@ -13,17 +17,52 @@
         date_posted = models.DateTimeField(auto_now_add=True)
         edited = models.BooleanField(default=False)
         -->
+        <div class="overflow-auto" style="max-height:100vh;">
+            <div class="h4 mb-0 pb-4 pt-2 sticky-top transparan">Home</div>
+            
+                <div class="card shadow-0" style="background: rgba(0, 0, 0, 0.025);">
+                    <div class="card-body p-4">
+                        {% for post in posts %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <p>{{ post.content }}</p>
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="30" height="30" class="rounded-circle shadow-1-strong"/>
+                                        <p class="small mb-0 ms-2">{{ post.poster }}</p>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                                        <p class="small text-muted mb-0">{{ post.num_of_likes }}</p>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <p class="small text-muted mb-0">{{ post.date_posted }}</p>
+                                    </div>
+                                    {% if user == post.poster %}
+                                    <div class="d-flex flex-row align-items-center">
+                                        <p class="small text-muted mb-0">delete button here</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-        {% for post in posts %}
-        <div class="p-3 border">
-            <div>{{ post.poster }} </div>
-            <div>{{ post.content }} </div>
-            <div>{{ post.num_of_likes }} likes</div>
-            <div>{{ post.date_posted }}</div>
+            <!-- <div class="p-3 border-bottom">
+                <div>{{ post.poster }} </div>
+                <div>{{ post.content }} </div>
+                <div>{{ post.num_of_likes }} likes</div>
+                <div>{{ post.date_posted }}</div>
+            </div> -->
+            <div class="text-center p-2">Page 1/1</div>
         </div>
-        {% endfor %}
-
     </div>
+
+    {% if user.is_authenticated %}
+    {% include "network/sidebar2.html" %}
+    {% endif %}
 
     <!-- New post modal -->
     <div class="modal top fade" id="newpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">

@@ -1,5 +1,9 @@
-<!-- Sidebar -->
-<div class="px-4 pt-5 col-lg-3 col-md-4 col-sm-5">
+<!-- Sidebar left -->
+{% if not user.is_authenticated %}
+<div class="px-4 col-lg-3 col-md-4 col-sm-5 my-4">
+{% else %}
+<div class="px-3 col-lg-2 col-md-3 col-sm-4 my-4">
+{% endif %}
     <div class="d-grid gap-2">
         <a href="/" class="h3 my-0 text-center comfortaa fw-bold">
             netw<i class="fa-solid fa-globe h5"></i>rk
@@ -11,7 +15,7 @@
     {% if user.is_authenticated %}
     <!-- New post button (modal) -->
     <div class="d-grid gap-2">
-        <button class="btn btn-secondary btn-rounded shadow-sm text-center" data-mdb-toggle="modal"
+        <button class="btn btn-secondary btn-rounded shadow-sm" data-mdb-toggle="modal"
             data-mdb-target="#newpost">
             New Post
         </button>
@@ -19,9 +23,9 @@
     {% else %}
     <!-- Login and register button (modal) -->
     <div class="d-grid gap-2">
-        <a href="{% url 'register' %}" class="btn btn-primary btn-rounded shadow-sm text-center" data-mdb-toggle="modal"
+        <a href="{% url 'register' %}" class="btn btn-primary btn-rounded shadow-sm" data-mdb-toggle="modal"
             data-mdb-target="#register">Register</a>
-        <a href="{% url 'login' %}" class="btn btn-secondary btn-rounded shadow-sm text-center" data-mdb-toggle="modal"
+        <a href="{% url 'login' %}" class="btn btn-secondary btn-rounded shadow-sm" data-mdb-toggle="modal"
             data-mdb-target="#login">Log In</a>
     </div>
     {% endif %}
@@ -34,9 +38,27 @@
         {% if user.is_authenticated %}
         <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Following</a>
         <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
-        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Profile: {{ user.username }}</a>
+        <!-- <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Profile: {{ user.username }}</a> -->
         <hr>
-        <a href="{% url 'logout' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log Out</a>
+        <!-- <a href="{% url 'logout' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log Out</a> -->
+
+        <!-- Example split primary button -->
+        <div class="btn-group shadow-0">
+            <a href="{% url 'index' %}" class="btn btn-secondary btn-rounded shadow-sm">@{{ user.username }}</a>
+            <!-- <button type="button" class="btn btn-primary">Action</button> -->
+            <button type="button" class="btn btn-secondary btn-rounded shadow-sm dropdown-toggle dropdown-toggle-split" data-mdb-toggle="dropdown"
+                aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'index' %}" class="dropdown-item">Settings</a></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li><a href="{% url 'logout' %}" class="dropdown-item">Log Out</a></li>
+            </ul>
+        </div>
+
         {% endif %}
     </div>
 </div>

@@ -25,6 +25,10 @@ def create(request):
     new_post.save()
     return redirect("index")
 
+
+def edit(request):
+    pass
+
 def login_view(request):
     if request.method == "POST":
 
