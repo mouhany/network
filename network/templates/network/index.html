@@ -43,12 +43,19 @@
                         </div>
                         <div class="my-2">{{ post.content }}</div>
                         <div class="d-flex justify-content-between align-items-center">
+                            <!-- Comment -->
                             <div>
-                                <i class="fa-regular fa-comment" role="button" data-mdb-toggle="modal" data-mdb-target="#comment_modal_{{ post.id }}"></i> <span>&#183;</span> {{ post.num_of_comments }}
+                                <i class="fa-regular fa-comment" role="button" data-mdb-toggle="modal" data-mdb-target="#comment_modal_{{ post.id }}"></i>
+                                <span class="mx-1 text-muted">&#183;</span>
+                                <span role="button" data-mdb-toggle="modal" data-mdb-target="#comment_list_modal_{{ post.id }}">{{ post.num_of_comments }}</span>
                             </div>
+                            <!-- Likes -->
                             <div>
-                                <i class="fa-regular fa-heart"></i> <span>&#183;</span> {{ post.num_of_likes }}
+                                <i class="fa-regular fa-heart"></i>
+                                <span class="mx-1 text-muted">&#183;</span>
+                                <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}">{{ post.num_of_likes }}</span>
                             </div>
+                            <!-- Share -->
                             <i class="fa-solid fa-share-nodes"></i>
                         </div>
                     </div>
@@ -84,6 +91,43 @@
                 </div>
             </div>
 
+            <!-- List of comments modal -->
+            <div class="modal top fade" id="comment_list_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+                <div class="modal-dialog modal-lg  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="p-5">
+                            <div class="px-5 col-auto">
+                                {% for comment in post.comment_list%}
+                                <div class="my-3">
+                                    <div>{{ comment.commenter }}</div>
+                                    <div>{{ comment.comment}}</div>
+                                    <div>{{ comment.commented}}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Likers modal -->
+            <div class="modal top fade" id="likers_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+                <div class="modal-dialog modal-lg  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="p-5">
+                            <div class="px-5 col-auto">
+                                {% for liker in post.likers.all %}
+                                <div class="my-3">
+                                    <div>{{ liker }}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
 
             <div class="text-center p-2">Page 1/1</div>

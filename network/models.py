@@ -21,6 +21,9 @@ class Post(models.Model):
     def num_of_comments(self):
         return len(self.comments.all())
     
+    def comment_list(self):
+        return self.comments.all()
+    
     def __str__(self):
         return f"{self.poster}: {self.content}"
     
@@ -30,12 +33,12 @@ class Post(models.Model):
         
 class Comment(models.Model):
     main_post = models.ForeignKey(Post, on_delete=models.SET_DEFAULT, default="Post deleted.", related_name="comments")
-    comment_content = models.CharField(max_length=255)
-    comment_poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
-    comment_date = models.DateTimeField(auto_now_add=True)
+    comment = models.CharField(max_length=255)
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    commented = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.comment_poster} comments on {self.main_post.poster}'s post"
+        return f"{self.commenter}: {self.comment}"
     
     class Meta:
-        ordering = ["-comment_date"]
+        ordering = ["-commented"]
