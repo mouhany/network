@@ -4,7 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User, Post
+from .models import User, Post, Comment
+
+
 
 
 def index(request):
@@ -16,7 +18,9 @@ def index(request):
 def create(request):
     # New post must be via POST request
     if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({
+            "error": "POST request required."
+        }, status=400)
     
     content = request.POST["content"]
     new_post = Post(
@@ -26,8 +30,28 @@ def create(request):
     return redirect("index")
 
 
-def edit(request):
+def comment(request, id):
+    if request.method != "POST":
+        return JsonResponse({
+            "error": "POST request required."
+        }, status=400)
+    main_post = Post.objects.get(pk=id)
+    comment = request.POST['comment']
+    new_comment = Comment(
+        main_post=main_post, 
+        comment_content=comment, 
+        comment_poster=request.user
+    )
+    new_comment.save()
+    return redirect("index")
+
+
+def edit(request, id):
+    # Edit post must be via POST request
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
     pass
+
 
 def login_view(request):
     if request.method == "POST":

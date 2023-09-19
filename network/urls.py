@@ -9,5 +9,5 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("create", views.create, name="create"),
-    path("edit", views.edit, name="edit"),
+    path("comment/<int:id>", views.comment, name="comment"),
 ]

@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load humanize %}
 
 {% block body %}
 
@@ -21,7 +22,7 @@
             <div class="h4 mb-0 pb-4 pt-2 sticky-top transparan">Home</div>
 
             {% for post in posts %}
-            <div class="container border-bottom p-3">
+            <div class="container border-bottom ps-3 pe-4 py-3">
                 <div class="row">
                     <div class="col-auto ps-0 pe-3">
                         <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="avatar" width="60" height="60" class="rounded-circle shadow-1-strong" />
@@ -29,99 +30,62 @@
                     <div class="col p-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <span class="fw-bold">{{post.poster}}</span>
+                                <span class="fw-bold">{{ post.id }}</span>
+                                <span class="fw-bold">{{ post.poster }}</span>
                                 <span class="small text-muted opacity-50">
                                     <span class="mx-2">&#183;</span>
-                                    {{post.date_posted}}
+                                    <span class="small">{{ post.date_posted|naturaltime }}</span>
                                 </span>
                             </div>
+                            {% if user == post.poster %}
                             <i class="fa-solid fa-ellipsis"></i>
+                            {% endif %}
                         </div>
-                        <div>{{ post.content }}</div>
+                        <div class="my-2">{{ post.content }}</div>
                         <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fa-regular fa-comment" role="button" data-mdb-toggle="modal" data-mdb-target="#comment_modal_{{ post.id }}"></i> <span>&#183;</span> {{ post.num_of_comments }}
+                            </div>
                             <div>
                                 <i class="fa-regular fa-heart"></i> <span>&#183;</span> {{ post.num_of_likes }}
                             </div>
-                            <i class="fa-regular fa-comment"></i>
                             <i class="fa-solid fa-share-nodes"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
 
-                    
-                    <!-- <div class="col-2">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="60" height="60"
-                            class="rounded-circle shadow-1-strong me-3" />
-                    </div>
-                    <div class="col-10">
-                        <div class="d-flex justify-content-between">
-                            <div>{{post.poster}}</div>
-                            <div><i class="fa-solid fa-ellipsis-vertical"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-10">
-                        <p>{{ post.content }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-10">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>like</div>
-                            <div>comment</div>
-                            <div>share</div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-
-                <!-- <div class="card shadow-0" style="background: rgba(0, 0, 0, 0.025);">
-                    <div class="card-body p-4">
-                        {% for post in posts %}
-                        <div class="card mb-4 shadow-sm">
-                            <div class="card-body">
-                                <p>{{ post.content }}</p>
-                                
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex flex-row align-items-center">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="30" height="30" class="rounded-circle shadow-1-strong"/>
-                                        <p class="small mb-0 ms-2">{{ post.poster }}</p>
+            <!-- Comment modal -->
+            <div class="modal top fade" id="comment_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                data-mdb-backdrop="true" data-mdb-keyboard="true">
+                <div class="modal-dialog modal-lg  modal-dialog-centered">
+                    <div class="modal-content">
+            
+                        <div class="p-5">
+                            <div class="px-5 col-auto">
+                                <form action="{% url 'comment' id=post.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="d-grid gap-3">
+            
+                                        <div class="form-outline">
+                                            <textarea class="form-control shadow-sm" id="comment_text_{{ post.id }}" rows="2"
+                                                name="comment"></textarea>
+                                            <label class="form-label" for="comment_text_{{ post.id }}">Add a comment for post {{ post.id }}:</label>
+                                        </div>
+            
+                                        <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit"
+                                            value="Post">
                                     </div>
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    <div class="d-flex flex-row align-items-center">
-                                        <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
-                                        <p class="small text-muted mb-0">{{ post.num_of_likes }}</p>
-                                    </div>
-                                    <div class="d-flex flex-row align-items-center">
-                                        <p class="small text-muted mb-0">{{ post.date_posted }}</p>
-                                    </div>
-                                    {% if user == post.poster %}
-                                    <div class="d-flex flex-row align-items-center">
-                                        <p class="small text-muted mb-0">delete button here</p>
-                                    </div>
-                                    <div class="d-flex flex-row align-items-center">
-                                        <p class="small text-muted mb-0">edit button here</p>
-                                    </div>
-                                    {% endif %}
-                                </div>
+                                </form>
                             </div>
                         </div>
-                        {% endfor %}
+            
                     </div>
-                </div> -->
+                </div>
+            </div>
 
-            <!-- <div class="p-3 border-bottom">
-                <div>{{ post.poster }} </div>
-                <div>{{ post.content }} </div>
-                <div>{{ post.num_of_likes }} likes</div>
-                <div>{{ post.date_posted }}</div>
-            </div> -->
+            {% endfor %}
+
             <div class="text-center p-2">Page 1/1</div>
         </div>
     </div>
