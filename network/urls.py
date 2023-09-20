@@ -10,4 +10,5 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("create", views.create, name="create"),
     path("comment/<int:id>", views.comment, name="comment"),
+    path("like/<int:id>", views.like, name="like"),
 ]

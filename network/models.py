@@ -7,6 +7,8 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     following = models.ManyToManyField("self", blank=True, related_name="followers", symmetrical=False)
     
+    def __str__(self):
+        return f"{self.id}. {self.username}"
 
 class Post(models.Model):
     content = models.CharField(max_length=255)
@@ -21,11 +23,8 @@ class Post(models.Model):
     def num_of_comments(self):
         return len(self.comments.all())
     
-    def comment_list(self):
-        return self.comments.all()
-    
     def __str__(self):
-        return f"{self.poster}: {self.content}"
+        return f"Post#{self.id} - {self.poster.username}: {self.content}"
     
     class Meta:
         ordering = ["-date_posted"]
@@ -38,7 +37,7 @@ class Comment(models.Model):
     commented = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.commenter}: {self.comment}"
+        return f"Post#{self.main_post.id} - {self.commenter.username}: {self.comment}"
     
     class Meta:
         ordering = ["-commented"]

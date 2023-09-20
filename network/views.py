@@ -7,8 +7,6 @@ from django.urls import reverse
 from .models import User, Post, Comment
 
 
-
-
 def index(request):
     return render(request, "network/index.html", {
         "posts": Post.objects.all()
@@ -39,19 +37,32 @@ def comment(request, id):
     comment = request.POST['comment']
     new_comment = Comment(
         main_post=main_post, 
-        comment_content=comment, 
-        comment_poster=request.user
+        comment=comment, 
+        commenter=request.user
     )
     new_comment.save()
     return redirect("index")
 
+# todo
+def like(request, id):
+    if request.method == "POST":
+        post = Post.objects.get(pk=id)
+        posts_liked = request.user.likes.all()
+        if post in posts_liked:
+            post.likers.remove(request.user)
+        else:
+            post.likers.add(request.user)
+        return redirect("index")
 
+# todo
 def edit(request, id):
     # Edit post must be via POST request
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
     pass
 
+
+################################################
 
 def login_view(request):
     if request.method == "POST":

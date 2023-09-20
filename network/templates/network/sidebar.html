@@ -38,14 +38,10 @@
         {% if user.is_authenticated %}
         <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Following</a>
         <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
-        <!-- <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">Profile: {{ user.username }}</a> -->
         <hr>
-        <!-- <a href="{% url 'logout' %}" class="btn btn-secondary btn-rounded shadow-sm text-center">Log Out</a> -->
-
-        <!-- Example split primary button -->
+        <!-- Profile, Log out -->
         <div class="btn-group shadow-0">
             <a href="{% url 'index' %}" class="btn btn-secondary btn-rounded shadow-sm">@{{ user.username }}</a>
-            <!-- <button type="button" class="btn btn-primary">Action</button> -->
             <button type="button" class="btn btn-secondary btn-rounded shadow-sm dropdown-toggle dropdown-toggle-split" data-mdb-toggle="dropdown"
                 aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
@@ -58,7 +54,6 @@
                 <li><a href="{% url 'logout' %}" class="dropdown-item">Log Out</a></li>
             </ul>
         </div>
-
         {% endif %}
     </div>
 </div>
