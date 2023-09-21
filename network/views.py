@@ -11,7 +11,7 @@ from .models import User, Post, Comment
 def index(request):
     posts = Post.objects.all()
     
-    p = Paginator(posts, 3) # Will set to 10 posts later
+    p = Paginator(posts, 5) # Will set to 10 posts later
     page_number = request.GET.get("page")
     page_posts = p.get_page(page_number)
     
@@ -20,6 +20,12 @@ def index(request):
         "page_number": page_number
     })
 
+
+def profile(request, username):
+    username = User.objects.get(username=username)
+    return render(request, "network/index.html", {
+        "posts": Post.objects.filter(poster=username),
+    })
 
 def create(request):
     # New post must be via POST request

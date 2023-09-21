@@ -41,7 +41,7 @@
         <hr>
         <!-- Profile, Log out -->
         <div class="btn-group shadow-0">
-            <a href="{% url 'index' %}" class="btn btn-secondary btn-rounded shadow-sm">@{{ user.username }}</a>
+            <a href="{% url 'profile' username=user.username %}" class="btn btn-secondary btn-rounded shadow-sm">{{ user.username }}</a>
             <button type="button" class="btn btn-secondary btn-rounded shadow-sm dropdown-toggle dropdown-toggle-split" data-mdb-toggle="dropdown"
                 aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
