@@ -3,13 +3,21 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from .models import User, Post, Comment
 
 
 def index(request):
+    posts = Post.objects.all()
+    
+    p = Paginator(posts, 3) # Will set to 10 posts later
+    page_number = request.GET.get("page")
+    page_posts = p.get_page(page_number)
+    
     return render(request, "network/index.html", {
-        "posts": Post.objects.all()
+        "posts": page_posts,
+        "page_number": page_number
     })
 
 

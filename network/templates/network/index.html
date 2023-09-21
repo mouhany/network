@@ -49,9 +49,9 @@
                                 <form action="{% url 'like' id=post.id %}" method="post">
                                     {% csrf_token %}
                                     {% if user in post.likers.all %}
-                                    <i class="fa-solid fa-heart" role="button"></i>
+                                    <i class="fa-solid fa-heart" role="button" id="like_post_{{ post.id }}"></i>
                                     {% else %}
-                                    <i class="fa-regular fa-heart" role="button"></i>
+                                    <i class="fa-regular fa-heart" role="button" id="like_post_{{ post.id }}"></i>
                                     {% endif %}
                                     {% if post.num_of_likes %}
                                     <span class="mx-1 text-muted">&#183;</span>
@@ -138,7 +138,55 @@
             </div>
             {% endfor %}
 
-            <div class="text-center p-2">Page 1/1</div>
+            <!-- Pagination -->
+            <div class="text-center p-2" >
+                <span class="step-links">
+                    {% if posts.has_previous %}
+                    <a href="?page=1"><i class=" mx-2 fa-solid fa-angles-left"></i></a>
+                    <a href="?page={{ posts.previous_page_number }}"><i class=" mx-2 fa-solid fa-angle-left"></i></a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+                    </span>
+            
+                    {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}"><i class="mx-2 fa-solid fa-angle-right"></i></a>
+                    <a href="?page={{ posts.paginator.num_pages }}"><i class="mx-2 fa-solid fa-angles-right"></i></a>
+                    {% endif %}
+                </span>
+            </div>
+
+            <!-- <ul class="pagination pagination-circle">
+                <li class="page-item">
+                    <a class="page-link">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">2 <span class="visually-hidden">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul> -->
+
+            <!-- <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul> -->
+
         </div>
     </div>
 
