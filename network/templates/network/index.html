@@ -107,10 +107,10 @@
                                 <div class="my-3">
                                     <div>{{ comment.commenter.username }}</div>
                                     <div>{{ comment.comment }}</div>
-                                    {% if "day" in comment.commented|naturaltime %}
-                                    <div>{{ comment.commented }}</div>
-                                    {% else %}
+                                    {% if "day" not in comment.commented|naturaltime %}
                                     <div>{{ comment.commented|naturaltime}}</div>
+                                    {% else %}
+                                    <div>{{ comment.commented }}</div>
                                     {% endif %}
                                 </div>
                                 {% endfor %}
@@ -140,54 +140,31 @@
             {% endfor %}
 
             <!-- Pagination -->
-            <div class="text-center p-2" >
-                <span class="step-links">
-                    {% if posts.has_previous %}
-                    <a href="?page=1"><i class=" mx-2 fa-solid fa-angles-left"></i></a>
-                    <a href="?page={{ posts.previous_page_number }}"><i class=" mx-2 fa-solid fa-angle-left"></i></a>
-                    {% endif %}
-            
-                    <span class="current">
-                        {{ posts.number }}
-                        <!-- Page {{ posts.number }} of {{ posts.paginator.num_pages }} -->
-                    </span>
-            
-                    {% if posts.has_next %}
-                    <a href="?page={{ posts.next_page_number }}"><i class="mx-2 fa-solid fa-angle-right"></i></a>
-                    <a href="?page={{ posts.paginator.num_pages }}"><i class="mx-2 fa-solid fa-angles-right"></i></a>
-                    {% endif %}
-                </span>
-            </div>
+            <ul class="pagination pagination-circle d-flex justify-content-center mt-3">
 
-            <!-- <ul class="pagination pagination-circle">
+                {% if posts.has_previous %}
                 <li class="page-item">
-                    <a class="page-link">Previous</a>
+                    <a class="page-link" href="?page=1"><i class="fa-solid fa-angles-left"></i></a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">2 <span class="visually-hidden">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                    <a class="page-link" href="?page={{ posts.previous_page_number }}">{{ posts.number|add:"-1" }}</a>
                 </li>
-            </ul> -->
+                {% endif %}
 
-            <!-- <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
+                <li class="page-item active current" aria-current="page">
+                    <a class="page-link" href="#">{{ posts.number }} <span class="visually-hidden">(current)</span></a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
+
+                {% if posts.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
+                    <a class="page-link" href="?page={{ posts.next_page_number }}">{{ posts.number|add:"1" }}</a>
                 </li>
-            </ul> -->
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
+                </li>
+                {% endif %}
+            </ul>
+            
 
         </div>
     </div>

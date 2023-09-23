@@ -29,6 +29,7 @@ def profile(request, username):
         "headline": f"Profile: {username.username}"
     })
 
+
 def create(request):
     # New post must be via POST request
     if request.method != "POST":
