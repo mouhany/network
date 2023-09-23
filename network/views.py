@@ -11,13 +11,14 @@ from .models import User, Post, Comment
 def index(request):
     posts = Post.objects.all()
     
-    p = Paginator(posts, 5) # Will set to 10 posts later
+    p = Paginator(posts, 4) # Will set to 10 posts later
     page_number = request.GET.get("page")
     page_posts = p.get_page(page_number)
     
     return render(request, "network/index.html", {
         "posts": page_posts,
-        "page_number": page_number
+        "page_number": page_number,
+        "headline": "Home"
     })
 
 
@@ -25,6 +26,7 @@ def profile(request, username):
     username = User.objects.get(username=username)
     return render(request, "network/index.html", {
         "posts": Post.objects.filter(poster=username),
+        "headline": f"Profile: {username.username}"
     })
 
 def create(request):

@@ -13,7 +13,7 @@
     {% endif %}
         <div class="overflow-auto" style="max-height:100vh;">
         <!-- <div> -->
-            <div class="h4 mb-0 pb-4 pt-2 sticky-top transparan">Home</div>
+            <div class="h4 mb-0 pb-4 pt-2 sticky-top transparan">{{ headline }}</div>
 
             {% for post in posts %}
             <div class="container border-bottom ps-3 pe-4 py-3">
@@ -148,7 +148,8 @@
                     {% endif %}
             
                     <span class="current">
-                        Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+                        {{ posts.number }}
+                        <!-- Page {{ posts.number }} of {{ posts.paginator.num_pages }} -->
                     </span>
             
                     {% if posts.has_next %}
@@ -194,31 +195,5 @@
     {% if user.is_authenticated %}
     {% include "network/sidebar2.html" %}
     {% endif %}
-
-    <!-- New post modal -->
-    <div class="modal top fade" id="newpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-        <div class="modal-dialog modal-lg  modal-dialog-centered">
-            <div class="modal-content">
-    
-                <div class="p-5">
-                    <div class="px-5 col-auto">
-                        <form action="{% url 'create' %}" method="post">
-                            {% csrf_token %}
-                            <div class="d-grid gap-3">
-
-                                <div class="form-outline">
-                                    <textarea class="form-control shadow-sm" id="content" rows="2" name="content"></textarea>
-                                    <label class="form-label" for="content">What's happening?</label>
-                                </div>
-
-                                <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit" value="Post">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-    
-            </div>
-        </div>
-    </div>
 
 {% endblock %}
