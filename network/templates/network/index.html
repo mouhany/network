@@ -24,7 +24,7 @@
                     <div class="col p-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <a href="{% url 'profile' username=post.poster.username %}" class="fw-bold text-decoration-none">{{ post.poster.username }}</a>
+                                <a href="{% url 'profile' user=post.poster.username %}" class="fw-bold text-decoration-none">{{ post.poster.username }}</a>
                                 <!-- <span class="fw-bold">{{ post.poster.username }}</span> -->
                                 <span class="small text-muted opacity-50">
                                     <span class="mx-2">&#183;</span>

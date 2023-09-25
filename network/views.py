@@ -22,12 +22,39 @@ def index(request):
     })
 
 
-def profile(request, username):
-    username = User.objects.get(username=username)
+def profile(request, user):
+    profile = User.objects.get(username=user)
+    profile_posts = Post.objects.filter(poster=profile)
+    
+    p = Paginator(profile_posts, 4)  # Will set to 10 posts later
+    profile_page_number = request.GET.get("page")
+    profile_page_posts = p.get_page(profile_page_number)
+    
     return render(request, "network/index.html", {
-        "posts": Post.objects.filter(poster=username),
-        "headline": f"Profile: {username.username}"
+        "posts": profile_page_posts,
+        "page_number": profile_page_number,
+        "headline": f"Profile: {profile.username}"
     })
+
+
+# Liked posts (in profile page)
+def likes(request, user):
+    profile = User.objects.get(username=user)
+    liked_post = profile.likes.all()
+    
+    p = Paginator(liked_post, 4)  # Will set to 10 posts later
+    likes_page_number = request.GET.get("page")
+    likes_page_posts = p.get_page(likes_page_number)
+
+    return render(request, "network/index.html", {
+        "posts": likes_page_posts,
+        "page_number": likes_page_number,
+        "headline": f"Liked by {profile.username}"
+    })
+
+
+def following(request):
+    pass
 
 
 def create(request):
@@ -78,6 +105,9 @@ def edit(request, id):
         return JsonResponse({"error": "POST request required."}, status=400)
     pass
 
+# todo
+def settings(request):
+    pass
 
 ################################################
 
