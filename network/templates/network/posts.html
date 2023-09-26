@@ -1,0 +1,183 @@
+{% load humanize %}
+
+<div class="h4 mb-0 pb-4 pt-2 sticky-top transparan">{{ headline }}</div>
+
+{% if not posts %}
+<div class="container ps-3 pe-4 py-3">
+    <h3 class="text-center">No posts yet</h3>
+</div>
+{% else %}
+{% for post in posts %}
+<div class="container border-bottom ps-3 pe-4 py-3">
+    <div class="row">
+        <div class="col-auto ps-0 pe-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="avatar" width="60" height="60"
+                class="rounded-circle shadow-1-strong" />
+        </div>
+        <div class="col p-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'profile' user=post.poster.username %}" class="fw-bold text-decoration-none">
+                        {{ post.poster.username }}
+                    </a>
+                    <!-- <span class="fw-bold">{{ post.poster.username }}</span> -->
+                    <span class="small text-muted opacity-50">
+                        <span class="mx-2">&#183;</span>
+                        <span class="small">{{ post.date_posted|naturaltime }}</span>
+                    </span>
+                </div>
+                {% if user == post.poster %}
+                <i class="fa-solid fa-ellipsis"></i>
+                {% endif %}
+            </div>
+            <div class="my-2">{{ post.content }}</div>
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Comment -->
+                <div>
+                    <i class="fa-regular fa-comment" role="button" data-mdb-toggle="modal" data-mdb-target="#comment_modal_{{ post.id }}"></i>
+                    <span class="mx-1 text-muted">&#183;</span>
+                    <span role="button" data-mdb-toggle="modal" data-mdb-target="#comment_list_modal_{{ post.id }}">
+                        {% if post.num_of_comments %}
+                        {{ post.num_of_comments }}
+                        {% else %}
+                        0
+                        {% endif %}
+                    </span>
+                </div>
+                <!-- Likes -->
+                <div>
+                    <i 
+                        {% if user.is_authenticated and user in post.likers.all %}
+                        class="fa-solid fa-heart"
+                        {% elif user.is_authenticated %}
+                        class="fa-regular fa-heart"
+                        {% else %}
+                        class="fa-regular fa-heart" role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}"
+                        {% endif %}
+                        >
+                    </i>
+                    <span class="mx-1 text-muted">&#183;</span>
+                    <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}">
+                        {% if post.num_of_likes %}
+                        {{ post.num_of_likes }}
+                        {% else %}
+                        0
+                        {% endif %}
+                    </span>
+                </div>
+                <!-- Share -->
+                <i class="fa-solid fa-share-nodes"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Comment (modal) -->
+<div class="modal top fade" id="comment_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="p-5">
+                <div class="px-5 col-auto">
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'comment' id=post.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-3">
+                            <div class="form-outline">
+                                <textarea class="form-control shadow-sm" id="comment_text_{{ post.id }}" rows="2"
+                                    name="comment"></textarea>
+                                <label class="form-label" for="comment_text_{{ post.id }}">Add a comment:</label>
+                            </div>
+
+                            <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit"
+                                value="Post">
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="my-3">
+                        <div>You must <a href="{% url 'login'%}">Log In</a> to comment</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- List of comments (modal) -->
+<div class="modal top fade" id="comment_list_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="p-5">
+                <div class="px-5 col-auto">
+                    {% if post.num_of_comments %}
+                    {% for comment in post.comments.all %}
+                    <div class="my-3">
+                        <div>{{ comment.commenter.username }}</div>
+                        <div>{{ comment.comment }}</div>
+                        {% if "day" not in comment.commented|naturaltime %}
+                        <div>{{ comment.commented|naturaltime}}</div>
+                        {% else %}
+                        <div>{{ comment.commented }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="my-3">
+                        No comments yet
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Likes modal (if not user.is_authenticated) -->
+<div class="modal top fade" id="like_post_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="p-5">
+                <div class="px-5 col-auto">
+                    {% if not user.is_authenticated %}
+                    <div class="my-3">
+                        <div>You must <a href="{% url 'login'%}">Log In</a> to like a post</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- List of likers (modal) -->
+<div class="modal top fade" id="likers_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="p-5">
+                <div class="px-5 col-auto">
+                    {% if post.num_of_likes %}
+                    {% for liker in post.likers.all %}
+                    <div class="my-3">
+                        <div>{{ liker.username }}</div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="my-3">
+                        No likes yet
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}

@@ -11,7 +11,7 @@ from .models import User, Post, Comment
 def index(request):
     posts = Post.objects.all()
     
-    p = Paginator(posts, 4) # Will set to 10 posts later
+    p = Paginator(posts, 7) # Will set to 10 posts later
     page_number = request.GET.get("page")
     page_posts = p.get_page(page_number)
     
@@ -26,7 +26,7 @@ def profile(request, user):
     profile = User.objects.get(username=user)
     profile_posts = Post.objects.filter(poster=profile)
     
-    p = Paginator(profile_posts, 4)  # Will set to 10 posts later
+    p = Paginator(profile_posts, 7)  # Will set to 10 posts later
     profile_page_number = request.GET.get("page")
     profile_page_posts = p.get_page(profile_page_number)
     
@@ -42,7 +42,7 @@ def likes(request, user):
     profile = User.objects.get(username=user)
     liked_post = profile.likes.all()
     
-    p = Paginator(liked_post, 4)  # Will set to 10 posts later
+    p = Paginator(liked_post, 7)  # Will set to 10 posts later
     likes_page_number = request.GET.get("page")
     likes_page_posts = p.get_page(likes_page_number)
 
