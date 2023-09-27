@@ -1,11 +1,11 @@
 <!-- Sidebar left -->
 
 <!-- <div class="px-4 col-lg-3 col-md-4 col-sm-5 my-4"> -->
-<div class="px-3 col-lg-2 col-md-3 col-sm-3 my-4">
+<div class="px-3 col-lg-2 col-md-3 col-sm-3 my-4 border">
 
     <!-- Title -->
     <div class="d-grid gap-2">
-        <a href="/" class="h3 my-0 text-center comfortaa fw-bold">
+        <a href="/" class="h3 mt-3 text-center comfortaa fw-bold">
             netw<i class="fa-solid fa-globe h5"></i>rk
         </a>
     </div>
@@ -184,12 +184,13 @@
 
     <!-- All posts, Following, Likes, Profile -->
     <div class="d-grid gap-2">
-        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">All Posts</a>
         {% if user.is_authenticated %}
+        <a href="{% url 'index' %}" class="btn btn-light btn-rounded shadow-sm">All Posts</a>
+        
         <a href="{% url 'following' %}" class="btn btn-light btn-rounded shadow-sm">Following</a>
-        <a href="{% url 'likes' user=user.username %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
+        
+        <a href="{% url 'likes' %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
         <hr>
-        <!-- Profile, Log out -->
         <div class="btn-group shadow-0">
             <a href="{% url 'profile' user=user.username %}" class="btn btn-secondary btn-rounded shadow-sm">{{ user.username }}</a>
             <button type="button" class="btn btn-secondary btn-rounded shadow-sm dropdown-toggle dropdown-toggle-split" data-mdb-toggle="dropdown"

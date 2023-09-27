@@ -11,50 +11,56 @@ from .models import User, Post, Comment
 def index(request):
     posts = Post.objects.all()
     
-    p = Paginator(posts, 7) # Will set to 10 posts later
+    p = Paginator(posts, 5) # Will set to 10 posts later
     page_number = request.GET.get("page")
     page_posts = p.get_page(page_number)
     
     return render(request, "network/index.html", {
         "posts": page_posts,
         "page_number": page_number,
-        "headline": "Home"
     })
 
 
-def profile(request, user):
-    profile = User.objects.get(username=user)
-    profile_posts = Post.objects.filter(poster=profile)
-    
-    p = Paginator(profile_posts, 7)  # Will set to 10 posts later
-    profile_page_number = request.GET.get("page")
-    profile_page_posts = p.get_page(profile_page_number)
-    
-    return render(request, "network/index.html", {
-        "posts": profile_page_posts,
-        "page_number": profile_page_number,
-        "headline": f"Profile: {profile.username}"
-    })
+def following(request):
+    pass
 
 
-# Liked posts (in profile page)
-def likes(request, user):
-    profile = User.objects.get(username=user)
+def likes(request):
+    profile = User.objects.get(username=request.user.username)
     liked_post = profile.likes.all()
-    
-    p = Paginator(liked_post, 7)  # Will set to 10 posts later
+    # Shorter ver.
+    # liked_post = User.objects.get(pk=request.user.id).likes.all()
+
+    p = Paginator(liked_post, 5)  # Will set to 10 posts later
     likes_page_number = request.GET.get("page")
     likes_page_posts = p.get_page(likes_page_number)
 
     return render(request, "network/index.html", {
         "posts": likes_page_posts,
         "page_number": likes_page_number,
-        "headline": f"Liked by {profile.username}"
     })
 
-
-def following(request):
-    pass
+# FE still buggy (back to user's posts tab when pagination on user's liked posts is clicked)
+# BE is ok
+# Can be refactored
+def profile(request, user):
+    profile = User.objects.get(username=user)
+    profile_posts = Post.objects.filter(poster=profile)
+    p = Paginator(profile_posts, 5)  # Will set to 10 posts later
+    profile_page_number = request.GET.get("page")
+    profile_page_posts = p.get_page(profile_page_number)
+    
+    profile_likes = Post.objects.filter(likers=profile)
+    p2 = Paginator(profile_likes, 5) # Will set to 10 posts later
+    profile_page_number2 = request.GET.get("page")
+    profile_page_posts2 = p2.get_page(profile_page_number2)
+    
+    return render(request, "network/profile.html", {
+        "posts": profile_page_posts,
+        "page_number": profile_page_number,
+        "liked_posts": profile_page_posts2,
+        "liked_posts_page_number": profile_page_number2
+    })
 
 
 def create(request):

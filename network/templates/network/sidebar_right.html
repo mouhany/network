@@ -1,18 +1,24 @@
 <!-- Sidebar right -->
-<div class="px-3 d-sm-none d-none d-md-block col-lg-3 col-md-3 my-4">
+<div class="px-3 d-sm-none d-none d-md-block col-lg-3 col-md-3 my-4 border">
     {% if user.is_authenticated %}
-    <div class="my-3 border border-primary">
-        Search bar here
+    <div class="my-3">
+        <div class="input-group btn-rounded">
+            <input type="search" class="btn-rounded form-control shadow-sm border-0" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+            <span class="input-group-text border-0" id="search-addon">
+                <i class="fas fa-search"></i>
+            </span>
+        </div>
     </div>
     {% endif %}
-    <div class="h4">Most followed user:</div>
+    <div class="h5">Most followed user:</div>
     <ul class="list-group list-group-light list-group-small mb-3">
         <li class="list-group-item border-0">user 1</li>
         <li class="list-group-item border-0">user 2</li>
         <li class="list-group-item border-0">user 3</li>
         <li class="list-group-item border-0" role="button">See more</li>
     </ul>
-    <div class="h4">Most liked post:</div>
+    <div class="h5">Most liked post:</div>
     <ul class="list-group list-group-light list-group-small mb-3">
         <li class="list-group-item border-0">post 1</li>
         <li class="list-group-item border-0">post 2</li>

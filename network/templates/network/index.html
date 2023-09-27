@@ -8,12 +8,23 @@
     <div class="col-lg-7 col-md-6 col-sm-9">
         <div class="overflow-auto" style="max-height:100vh;">
         <!-- <div> -->
-            {% include "network/posts.html" with posts=posts %}
+
+            {% url 'index' as index %}
+            {% url 'following' as following %}
+            {% url 'likes' as likes %}
+
+            {% if request.path == index %}
+            {% include "network/posts.html" with posts=posts headline="Home" %}
+            {% elif request.path == following %}
+            {% include "network/posts.html" with posts=posts headline="Following" %}
+            {% elif request.path == likes %}
+            {% include "network/posts.html" with posts=posts headline="Likes" %}
+            {% endif %}
+
             {% include "network/pagination.html" with posts=posts %}
         </div>
     </div>
 
     {% include "network/sidebar_right.html" %}
-
 
 {% endblock %}

@@ -1,7 +1,16 @@
 {% load humanize %}
 
-<div class="h4 mb-0 pb-4 pt-2 sticky-top transparan">{{ headline }}</div>
+<!-- Headline -->
+<div 
+{% if not headline %}
+class="h4 mb-0 pb-4 pt-2 sticky-top transparan d-none">
+{% else %}
+class="h4 mb-0 pb-4 pt-2 sticky-top transparan">
+{% endif %}
+    {{ headline }}
+</div>
 
+<!-- Posts -->
 {% if not posts %}
 <div class="container ps-3 pe-4 py-3">
     <h3 class="text-center">No posts yet</h3>
@@ -20,7 +29,6 @@
                     <a href="{% url 'profile' user=post.poster.username %}" class="fw-bold text-decoration-none">
                         {{ post.poster.username }}
                     </a>
-                    <!-- <span class="fw-bold">{{ post.poster.username }}</span> -->
                     <span class="small text-muted opacity-50">
                         <span class="mx-2">&#183;</span>
                         <span class="small">{{ post.date_posted|naturaltime }}</span>
@@ -72,7 +80,8 @@
     </div>
 </div>
 
-<!-- Comment (modal) -->
+<!-- Modals -->
+<!-- Comment -->
 <div class="modal top fade" id="comment_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered">
@@ -105,8 +114,7 @@
         </div>
     </div>
 </div>
-
-<!-- List of comments (modal) -->
+<!-- List of comments -->
 <div class="modal top fade" id="comment_list_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered">
@@ -135,8 +143,7 @@
         </div>
     </div>
 </div>
-
-<!-- Likes modal (if not user.is_authenticated) -->
+<!-- Likes (if not user.is_authenticated) -->
 <div class="modal top fade" id="like_post_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered">
@@ -155,8 +162,7 @@
         </div>
     </div>
 </div>
-
-<!-- List of likers (modal) -->
+<!-- List of likers -->
 <div class="modal top fade" id="likers_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered">
