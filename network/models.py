@@ -7,6 +7,12 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     following = models.ManyToManyField("self", blank=True, related_name="followers", symmetrical=False)
     
+    def num_of_following(self):
+        return len(self.following.all())
+    
+    def num_of_followers(self):
+        return len(self.followers.all())
+    
     def __str__(self):
         return f"{self.id}. {self.username}"
 
