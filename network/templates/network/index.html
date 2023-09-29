@@ -6,7 +6,7 @@
 
     <!-- Main -->
     <div class="col-lg-7 col-md-6 col-sm-9">
-        <div class="overflow-auto" style="max-height:100vh;">
+        <div class="overflow-auto px-3" style="max-height:100vh;">
         <!-- <div> -->
 
             {% url 'index' as index %}
@@ -25,6 +25,6 @@
         </div>
     </div>
 
-    {% include "network/sidebar_right.html" %}
+    {% include "network/sidebar_right.html" with most_liked_posts=most_liked_posts most_followed_users=most_followed_users %}
 
 {% endblock %}

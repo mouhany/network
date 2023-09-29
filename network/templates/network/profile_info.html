@@ -1,56 +1,70 @@
-<div class="shadow-sm bg-white rounded p-3 col-12">
-    <div class="row mb-3 ">
-        <div class="mb-3">
-            <!-- User icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" height="4em" class="me-4 align-middle"
-                viewBox="0 0 512 512"><path d="M406.5 399.6C387.4 352.9 341.5 320 288 320H224c-53.5 0-99.4 32.9-118.5 79.6C69.9 362.2 48 311.7 48 256C48 141.1 141.1 48 256 48s208 93.1 208 208c0 55.7-21.9 106.2-57.5 143.6zm-40.1 32.7C334.4 452.4 296.6 464 256 464s-78.4-11.6-110.5-31.7c7.3-36.7 39.7-64.3 78.5-64.3h64c38.8 0 71.2 27.6 78.5 64.3zM256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-272a40 40 0 1 1 0-80 40 40 0 1 1 0 80zm-88-40a88 88 0 1 0 176 0 88 88 0 1 0 -176 0z" />
-            </svg>
-            <!-- <svg xmlns="http://www.w3.org/2000/svg" height="4em" fill="currentColor" class="me-4 align-middle bi bi-person-circle"
-                viewBox="0 0 16 16">
+<div class="container p-0">
+    <div class="row p-4">
+        <a href="{% url 'profile' user=profile.username %}" class="col-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" height="5em" fill="currentColor" class="text-primary align-middle bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path fill-rule="evenodd"
-                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-            </svg> -->
-            <!-- <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="avatar" width="120" height="120"
-                class="me-4 align-middle rounded-circle shadow-1-strong" /> -->
-
-            <a href="{% url 'profile' user=profile.username %}" class="my-3 align-middle">
-                <span class="h4 fw-bold text-decoration-none text-lowercase">
-                    {{ profile.username }}
-                </span>
-                <span class="mx-1 text-muted">&#183;</span>
-                <span class="small text-muted opacity-50 align-middle">
-                    Joined {{profile.date_joined.date}}
-                </span>
-            </a>
-        </div>
-
-        <!-- Following & followers -->
-        <div class="row">
-            <div class="col-3" role="button" data-mdb-toggle="modal" data-mdb-target="#following_{{ profile.id }}">
-                <span class="fw-bold me-1">{{ profile.num_of_following|add:"-1" }}</span> Following
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+            </svg>
+        </a>
+        <div class="col p-0">
+            <div class="d-flex justify-content-between mx-2">
+                <div>
+                    <a href="{% url 'profile' user=profile.username %}" class="h4 fw-bold text-decoration-none align-middle">
+                        {{ profile.username }}
+                    </a>
+                    <span class="small text-muted opacity-50 align-middle">
+                        <span class="align-middle mx-2">&#183;</span>
+                        <span class="small align-middle"><i class="fa-regular fa-calendar-days me-2"></i>Joined {{profile.date_joined.date|date:"F Y"}}</span>
+                    </span>
+                </div>
             </div>
-            <div class="col-3" role="button" data-mdb-toggle="modal" data-mdb-target="#followers_{{ profile.id }}">
-                <span class="fw-bold me-1">{{ profile.num_of_followers|add:"-1" }}</span> Followers
+            <!-- Follow / following button -->
+            <div>
+                {% if not user.is_authenticated %}
+                <button class="btn btn-secondary btn-rounded shadow-sm my-4" role="button" data-mdb-toggle="modal" data-mdb-target="#follow">
+                    Follow
+                </button>
+                {% elif user.is_authenticated and user.username != profile.username %}
+                <button class="btn btn-secondary btn-rounded shadow-sm my-4">
+                    {% if profile.username in user.following %}
+                    Unfollow
+                    {% else %}
+                    Follow
+                    {% endif %}
+                </button>
+                {% else %}
+                <div class="my-3"></div>
+                {% endif %}
+            </div>
+            <!-- Following & followers count -->
+            <div class="row">
+                <div class="col-3" role="button" data-mdb-toggle="modal" data-mdb-target="#following_{{ profile.id }}">
+                    <span class="fw-bold me-1">{{ profile.num_of_following }}</span> Following
+                </div>
+                <div class="col-3" role="button" data-mdb-toggle="modal" data-mdb-target="#followers_{{ profile.id }}">
+                    <span class="fw-bold me-1">{{ profile.num_of_followers }}</span> Followers
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<!-- Modal: Followers -->
+<!-- Modal -->
+<!-- List of followers -->
 <div class="modal top fade" id="followers_{{ profile.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-    <div class="modal-dialog modal-lg  modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="p-5">
-                <div class="px-5 col-auto">
+                <div class="col-auto">
                     {% if profile.num_of_followers %}
-                    {% for follower in profile.followers.all %}
-                    <div class="my-3">
-                        {{ follower.username }}
-                    </div>
-                    {% endfor %}
+                        {% for follower in profile.followers.all %}
+                        <div class="mb-5">
+                            <a href="{% url 'profile' user=follower.username %}" class="fw-bold text-decoration-none align-middle">
+                                {{ follower.username }}
+                            </a>
+                        </div>
+                        {% endfor %}
                     {% else %}
                     <div class="my-3">
                         No followers yet
@@ -61,23 +75,41 @@
         </div>
     </div>
 </div>
-
-<!-- Modal: Following -->
+<!-- List of following -->
 <div class="modal top fade" id="following_{{ profile.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-    <div class="modal-dialog modal-lg  modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="p-5">
-                <div class="px-5 col-auto">
+                <div class="col-auto">
                     {% if profile.num_of_following %}
-                    {% for following in profile.following.all %}
-                    <div class="my-3">
-                        {{ following.username }}
-                    </div>
-                    {% endfor %}
+                        {% for following in profile.following.all %}
+                        <div class="mb-5">
+                            <a href="{% url 'profile' user=following.username %}" class="fw-bold text-decoration-none align-middle">
+                                {{ following.username }}
+                            </a>
+                        </div>
+                        {% endfor %}
                     {% else %}
                     <div class="my-3">
                         Not following anyone yet
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Follow button if not user.is_authenticated -->
+<div class="modal top fade" id="follow" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="p-5">
+                <div class="col-auto">
+                    {% if not user.is_authenticated %}
+                    <div class="my-3">
+                        <div>You must <a href="{% url 'login'%}">Log In</a> first.</div>
                     </div>
                     {% endif %}
                 </div>

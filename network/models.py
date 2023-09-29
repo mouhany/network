@@ -6,12 +6,15 @@ class User(AbstractUser):
     pass
     date_joined = models.DateTimeField(auto_now_add=True)
     following = models.ManyToManyField("self", blank=True, related_name="followers", symmetrical=False)
-    
+        
     def num_of_following(self):
         return len(self.following.all())
     
     def num_of_followers(self):
         return len(self.followers.all())
+    
+    # class Meta:
+    #     ordering = ["username"]
     
     def __str__(self):
         return f"{self.id}. {self.username}"
@@ -34,7 +37,6 @@ class Post(models.Model):
     
     class Meta:
         ordering = ["-date_posted"]
-        
         
 class Comment(models.Model):
     main_post = models.ForeignKey(Post, on_delete=models.SET_DEFAULT, default="Post deleted.", related_name="comments")

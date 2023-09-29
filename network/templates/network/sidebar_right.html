@@ -1,6 +1,6 @@
 <!-- Sidebar right -->
 <div class="px-3 d-sm-none d-none d-md-block col-lg-3 col-md-3 my-4 ">
-    {% if user.is_authenticated %}
+    <!-- {% if user.is_authenticated %}
     <div class="my-3">
         <div class="input-group btn-rounded">
             <input type="search" class="btn-rounded form-control shadow-sm border-0" placeholder="Search" aria-label="Search"
@@ -10,19 +10,71 @@
             </span>
         </div>
     </div>
-    {% endif %}
+    {% endif %} -->
     <div class="h5">Most followed user:</div>
     <ul class="list-group list-group-light list-group-small mb-3">
-        <li class="list-group-item border-0">user 1</li>
-        <li class="list-group-item border-0">user 2</li>
-        <li class="list-group-item border-0">user 3</li>
-        <li class="list-group-item border-0" role="button">See more</li>
+        {% for user in most_followed_users|slice:":3" %}
+        <li class="list-group-item border-0">
+            <a href="{% url 'profile' user=user.username %}" class="fw-bold text-decoration-none align-middle">
+                {{ user.username }} ({{user.num_of_followers}} followers)
+            </a>
+        </li>
+        {% endfor %}
+        <li class="list-group-item border-0" role="button" data-mdb-toggle="modal" data-mdb-target="#most_followed_users">
+            See more
+        </li>
     </ul>
+
     <div class="h5">Most liked post:</div>
     <ul class="list-group list-group-light list-group-small mb-3">
-        <li class="list-group-item border-0">post 1</li>
-        <li class="list-group-item border-0">post 2</li>
-        <li class="list-group-item border-0">post 3</li>
-        <li class="list-group-item border-0" role="button">See more</li>
+        {% for post in most_liked_posts|slice:":3" %}
+        <li class="list-group-item border-0">
+            <a href="{% url 'profile' user=post.poster.username %}" class="fw-bold text-decoration-none align-middle">
+                {{ post.content }} ({{ post.num_of_likes }} likes)
+            </a>
+        </li>
+        {% endfor %}
+        <li class="list-group-item border-0" role="button" data-mdb-toggle="modal" data-mdb-target="#most_liked_posts">See more</li>
     </ul>
+
+</div>
+
+<!-- Most followed user -->
+<div class="modal top fade" id="most_followed_users" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="p-5">
+                <div class="col-auto">
+                    {% for user in most_followed_users %}
+                    <li class="list-group-item border-0">
+                        <a href="{% url 'profile' user=user.username %}" class="fw-bold text-decoration-none align-middle">
+                            {{ user.username }} ({{ user.num_of_followers }} followers)
+                        </a>
+                    </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Most liked post -->
+<div class="modal top fade" id="most_liked_posts" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="p-5">
+                <div class="col-auto">
+                    {% for post in most_liked_posts %}
+                    <div class="mb-5">
+                        <a href="{% url 'profile' user=post.poster.username %}" class="text-decoration-none align-middle">
+                            <span class="fw-bold me-2">{{ post.poster.username }}:</span> {{ post.content }} ({{ post.num_of_likes }} likes)
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

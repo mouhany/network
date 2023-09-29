@@ -9,6 +9,9 @@ from .models import User, Post, Comment
 
 
 def index(request):
+    most_followed_users = User.objects.all().order_by('-following')
+    most_liked_posts = Post.objects.all().order_by("-likers")
+    
     posts = Post.objects.all()
     
     p = Paginator(posts, 5) # Will set to 10 posts later
@@ -16,16 +19,30 @@ def index(request):
     page_posts = p.get_page(page_number)
     
     return render(request, "network/index.html", {
+        "most_followed_users": most_followed_users,
+        "most_liked_posts": most_liked_posts,
         "posts": page_posts,
         "page_number": page_number,
     })
 
 
 def following(request):
-    pass
+    most_followed_users = User.objects.all().order_by('-following')
+    most_liked_posts = Post.objects.all().order_by("-likers")
+    
+    following = User.objects.get(username=request.user.username).following.all()
+    
+    return render(request, "network/index.html", {
+        "most_followed_users": most_followed_users,
+        "most_liked_posts": most_liked_posts,
+        "posts": following,
+    })
 
 
 def likes(request):
+    most_followed_users = User.objects.all().order_by('-following')
+    most_liked_posts = Post.objects.all().order_by("-likers")
+    
     profile = User.objects.get(username=request.user.username)
     liked_post = profile.likes.all()
     # Shorter ver.
@@ -36,16 +53,23 @@ def likes(request):
     likes_page_posts = p.get_page(likes_page_number)
 
     return render(request, "network/index.html", {
+        "most_followed_users": most_followed_users,
+        "most_liked_posts": most_liked_posts,
         "posts": likes_page_posts,
         "page_number": likes_page_number,
     })
 
 
 def profile(request, user):
+    most_followed_users = User.objects.all().order_by('-following')
+    most_liked_posts = Post.objects.all().order_by("-likers")
+    
     profile = User.objects.get(username=user)
     profile_posts = Post.objects.filter(poster=profile)
     profile_likes = Post.objects.filter(likers=profile)
     return render(request, "network/profile.html", {
+        "most_followed_users": most_followed_users,
+        "most_liked_posts": most_liked_posts,
         "profile": profile,
         "posts": profile_posts,
         "liked_posts": profile_likes,
