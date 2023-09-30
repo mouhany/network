@@ -9,8 +9,9 @@ from .models import User, Post, Comment
 
 
 def index(request):
-    most_followed_users = User.objects.all().order_by('-following')
-    most_liked_posts = Post.objects.all().order_by("-likers")
+    most_followed_users = User.most_followed_users()
+    most_liked_posts = Post.most_liked_posts()
+    most_commented_posts = Post.most_commented_posts()
     
     posts = Post.objects.all()
     
@@ -21,27 +22,31 @@ def index(request):
     return render(request, "network/index.html", {
         "most_followed_users": most_followed_users,
         "most_liked_posts": most_liked_posts,
+        "most_commented_posts": most_commented_posts,
         "posts": page_posts,
         "page_number": page_number,
     })
 
 
 def following(request):
-    most_followed_users = User.objects.all().order_by('-following')
-    most_liked_posts = Post.objects.all().order_by("-likers")
+    most_followed_users = User.most_followed_users()
+    most_liked_posts = Post.most_liked_posts()
+    most_commented_posts = Post.most_commented_posts()
     
     following = User.objects.get(username=request.user.username).following.all()
     
     return render(request, "network/index.html", {
         "most_followed_users": most_followed_users,
         "most_liked_posts": most_liked_posts,
+        "most_commented_posts": most_commented_posts,
         "posts": following,
     })
 
 
 def likes(request):
-    most_followed_users = User.objects.all().order_by('-following')
-    most_liked_posts = Post.objects.all().order_by("-likers")
+    most_followed_users = User.most_followed_users()
+    most_liked_posts = Post.most_liked_posts()
+    most_commented_posts = Post.most_commented_posts()
     
     profile = User.objects.get(username=request.user.username)
     liked_post = profile.likes.all()
@@ -55,24 +60,29 @@ def likes(request):
     return render(request, "network/index.html", {
         "most_followed_users": most_followed_users,
         "most_liked_posts": most_liked_posts,
+        "most_commented_posts": most_commented_posts,
         "posts": likes_page_posts,
         "page_number": likes_page_number,
     })
 
 
 def profile(request, user):
-    most_followed_users = User.objects.all().order_by('-following')
-    most_liked_posts = Post.objects.all().order_by("-likers")
+    most_followed_users = User.most_followed_users()
+    most_liked_posts = Post.most_liked_posts()
+    most_commented_posts = Post.most_commented_posts()
     
     profile = User.objects.get(username=user)
     profile_posts = Post.objects.filter(poster=profile)
     profile_likes = Post.objects.filter(likers=profile)
+    profile_comments = Comment.objects.filter(commenter=profile)
     return render(request, "network/profile.html", {
         "most_followed_users": most_followed_users,
         "most_liked_posts": most_liked_posts,
+        "most_commented_posts": most_commented_posts,
         "profile": profile,
         "posts": profile_posts,
         "liked_posts": profile_likes,
+        "comments": profile_comments,
     })
 
 
@@ -106,6 +116,32 @@ def comment(request, id):
     new_comment.save()
     return redirect("index")
 
+
+def post(request, id):
+    most_followed_users = User.most_followed_users()
+    most_liked_posts = Post.most_liked_posts()
+    most_commented_posts = Post.most_commented_posts()
+    
+    post = Post.objects.get(pk=id)
+    post_comments = post.comments.all()
+    
+    if request.method == "POST":
+        comment = request.POST['comment_post']
+        new_comment = Comment(
+            main_post=post, 
+            comment=comment, 
+            commenter=request.user
+        )
+        new_comment.save()
+    
+    return render(request, "network/post.html", {
+        "post": post,
+        "post_comments": post_comments,
+        "most_followed_users": most_followed_users,
+        "most_liked_posts": most_liked_posts,
+        "most_commented_posts": most_commented_posts,
+    })
+    
 # todo
 def like(request, id):
     if request.method == "POST":

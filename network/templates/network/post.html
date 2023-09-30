@@ -1,0 +1,204 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% include "network/sidebar_left.html" %}
+
+<!-- Main -->
+<div class="col-lg-7 col-md-6 col-sm-9">
+    <div class="overflow-auto px-3" style="max-height:100vh;">
+
+        <!-- Headline -->
+        <div class="h4 mb-0 pb-4 pt-2 text-primary sticky-top transparan">
+            Post
+        </div>
+
+        <div class="transparan">
+            <!-- Headline here will get pushed by comment form -->
+            <!-- <div class="h4 mb-0 pb-4 pt-2 text-primary sticky-top transparan">
+                Post
+            </div> -->
+
+            <!-- Post -->
+            <div class="container p-0 border-bottom">
+                <div>
+                    <div class="px-4 pt-3 border-bottom">
+                        <div class="row">
+                            <a href="{% url 'profile' user=post.poster.username %}" class="col-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="4em" fill="currentColor"
+                                    class="text-primary align-middle bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                    <path fill-rule="evenodd"
+                                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                </svg>
+                            </a>
+                            <div class="col p-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <a href="{% url 'profile' user=post.poster.username %}" class="fw-bold text-decoration-none align-middle">
+                                            {{ post.poster.username }}
+                                        </a>
+                                    </div>
+                                    {% if user == post.poster %}
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="py-3 blockquote">{{ post.content }}</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="border-bottom py-2 px-4">
+                        <div class="small text-muted opacity-50">
+                            {{ post.date_posted.time|date:"h:i"}}
+                            <span class="mx-1 align-middle">&#183;</span>
+                            {{post.date_posted.date|date:"l, F j, Y"}}
+                        </div>
+                    </div>
+                    <div class="px-4 py-2 d-flex justify-content-start align-items-center">
+                        <!-- Comment -->
+                        <div class="pe-5" role="button" data-mdb-toggle="modal" data-mdb-target="#comment_modal_{{ post.id }}">
+                            <i class="fa-regular fa-comment"></i>
+                            <span class="mx-1 text-muted">&#183;</span>
+                            {% if post.num_of_comments %}
+                            {{ post.num_of_comments }}
+                            {% else %}
+                            0
+                            {% endif %}
+                        </div>
+                        <!-- Likes -->
+                        <div class="px-5">
+                            <i {% if user.is_authenticated and user in post.likers.all %} class="fa-solid fa-heart" {% elif
+                                user.is_authenticated %} class="fa-regular fa-heart" {% else %} class="fa-regular fa-heart"
+                                role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" {% endif %}>
+                            </i>
+                            <span class="mx-1 text-muted">&#183;</span>
+                            <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}">
+                                {% if post.num_of_likes %}
+                                {{ post.num_of_likes }}
+                                {% else %}
+                                0
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comment form -->
+        <!-- <div class="container p-0">
+            <div class="pt-4">
+                <div class="col-auto">
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'post' id=post.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-3">
+                            <div class="form-outline">
+                                <textarea class="form-control shadow-sm" id="comment_text_{{ post.id }}" rows="2"
+                                    name="comment_post"></textarea>
+                                <label class="form-label" for="comment_text_{{ post.id }}">Add a comment:</label>
+                            </div>
+                            <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit" value="Post">
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="my-3">
+                        <div>You must <a href="{% url 'login'%}">Log In</a> to comment.</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Comments -->
+        <div class="container p-0">
+            <div class="py-4">
+                {% include "network/comments.html" with comments=post.comments.all %}
+            </div>
+        </div>
+        
+        <!-- Modals -->
+        <!-- Comment form -->
+        <div class="modal top fade" id="comment_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+            <div class="modal-dialog modal-lg  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="p-5">
+                        <div class="px-5 col-auto">
+                            {% if user.is_authenticated %}
+                            <form action="{% url 'post' id=post.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="d-grid gap-3">
+                                    <div class="form-outline">
+                                        <textarea class="form-control shadow-sm" id="comment_text_{{ post.id }}" rows="2"
+                                            name="comment_post"></textarea>
+                                        <label class="form-label" for="comment_text_{{ post.id }}">Add a comment:</label>
+                                    </div>
+        
+                                    <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit"
+                                        value="Post">
+                                </div>
+                            </form>
+                            {% else %}
+                            <div class="my-3">
+                                <div>You must <a href="{% url 'login'%}">Log In</a> to comment.</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+        <!-- Likes (if not user.is_authenticated) -->
+        <div class="modal top fade" id="like_post_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+            <div class="modal-dialog modal-lg  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="p-5">
+                        <div class="px-5 col-auto">
+                            {% if not user.is_authenticated %}
+                            <div class="my-3">
+                                <div>You must <a href="{% url 'login'%}">Log In</a> to like a post.</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- List of likers -->
+        <div class="modal top fade" id="likers_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+            <div class="modal-dialog modal-lg  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="p-5">
+                        <div class="px-5 col-auto">
+                            {% if user.is_authenticated and post.num_of_likes %}
+                            {% for liker in post.likers.all %}
+                            <div class="my-3">
+                                <div>{{ liker.username }}</div>
+                            </div>
+                            {% endfor %}
+                            {% elif user_is_authenticated and not post.num_of_likes %}
+                            <div class="my-3">
+                                No likes yet
+                            </div>
+                            {% elif not user.is_authenticated %}
+                            <div class="my-3">
+                                <div>You must <a href="{% url 'login'%}">Log In</a> to view this.</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include "network/sidebar_right.html" %}
+
+{% endblock %}
