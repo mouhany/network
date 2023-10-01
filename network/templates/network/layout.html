@@ -31,9 +31,24 @@
         <div class="container-flow px-3">
             <div class="row d-flex">
                 
-                {% block body %}
-                {% endblock %}
+                <!-- Sidebar left -->
+                <div class="px-3 col-lg-2 col-md-3 col-sm-3 mt-4">
+                    {% block sidebar_left %}
+                    {% endblock %}
+                </div>
                 
+                <!-- Main -->
+                <div class="px-3 col-lg-7 col-md-6 col-sm-9 overflow-auto" style="max-height:100vh;">
+                    {% block main %}
+                    {% endblock %}
+                </div>
+                
+                <!-- Sidebar right -->
+                <div class="px-3 col-lg-3 col-md-3 pt-2 d-sm-none d-none d-md-block">
+                    {% block sidebar_right %}
+                    {% endblock %}
+                </div>
+
             </div>
         </div>
     </body>

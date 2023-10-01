@@ -15,7 +15,7 @@ def index(request):
     
     posts = Post.objects.all()
     
-    p = Paginator(posts, 5) # Will set to 10 posts later
+    p = Paginator(posts, 10) # Will set to 10 posts later
     page_number = request.GET.get("page")
     page_posts = p.get_page(page_number)
     
@@ -33,13 +33,18 @@ def following(request):
     most_liked_posts = Post.most_liked_posts()
     most_commented_posts = Post.most_commented_posts()
     
-    following = User.objects.get(username=request.user.username).following.all()
+    followed_user = User.objects.get(username=request.user.username).following.all()
+    followed_posts = Post.objects.filter(poster__in=followed_user)
+    
+    p = Paginator(followed_posts, 10)  # Will set to 10 posts later
+    page_number = request.GET.get("page")
+    followed_user_posts = p.get_page(page_number)
     
     return render(request, "network/index.html", {
         "most_followed_users": most_followed_users,
         "most_liked_posts": most_liked_posts,
         "most_commented_posts": most_commented_posts,
-        "posts": following,
+        "posts": followed_user_posts,
     })
 
 
@@ -53,7 +58,7 @@ def likes(request):
     # Shorter ver.
     # liked_post = User.objects.get(pk=request.user.id).likes.all()
 
-    p = Paginator(liked_post, 5)  # Will set to 10 posts later
+    p = Paginator(liked_post, 10)  # Will set to 10 posts later
     likes_page_number = request.GET.get("page")
     likes_page_posts = p.get_page(likes_page_number)
 

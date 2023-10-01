@@ -1,7 +1,6 @@
-<!-- Sidebar right -->
-<div class="px-3 d-sm-none d-none d-md-block col-lg-3 col-md-3 my-4 ">
-
-    <!-- <div class="h5">Most followed users:</div>
+<!-- Most followed user -->
+<!-- <div class="mb-5">
+    <div class="h5">Most followed users:</div>
     <ul class="list-group list-group-light list-group-small mb-3">
         {% for user in most_followed_users|slice:":3" %}
         <li class="list-group-item border-0">
@@ -13,43 +12,62 @@
         <li class="list-group-item border-0" role="button" data-mdb-toggle="modal" data-mdb-target="#most_followed_users">
             See more
         </li>
-    </ul> -->
+    </ul>
+</div> -->
 
-    <div class="mb-5">
-        <div class="h5">Most liked posts:</div>
-        <ul class="list-group list-group-light list-group-small mb-3">
-            {% for post in most_liked_posts|slice:":3" %}
-            <li class="list-group-item border-0">
-                <a href="{% url 'post' id=post.id %}" class="fw-bold text-decoration-none align-middle">
-                    {{ post.content }} ({{ post.num_of_likes }} likes)
-                </a>
-            </li>
-            {% endfor %}
-            <li class="list-group-item border-0" role="button" data-mdb-toggle="modal" data-mdb-target="#most_liked_posts">See
-                more</li>
-        </ul>
+<!-- Most liked post -->
+<div class="mb-4 lh-sm">
+    <div class="h5 px-2 text-primary sticky-top transparan">Most liked posts</div>
+    <div class="list-group list-group-light list-group-small">
+        {% for post in most_liked_posts|slice:":3" %}
+        <div class="post p-2 border-bottom small">
+            <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none align-middle">
+                <div class="text-primary fw-bold mb-1">{{ post.poster.username }}</div>
+                <span class="fw-bold">{{ post.num_of_likes }} likes</span>
+                <span class="mx-1 align-middle">&#183;</span>
+                <span>{{post.content}}</span>
+            </a>
+        </div>
+        {% endfor %}
+        <div class="fw-bold post p-2 border-bottom" role="button" data-mdb-toggle="modal" data-mdb-target="#most_liked_posts">
+            <i class="align-middle me-3 fa-solid fa-arrow-right-long"></i>
+            See more
+        </div>
+        <!-- <div class="btn btn-secondary btn-rounded shadow-sm mt-3" role="button" data-mdb-toggle="modal" data-mdb-target="#most_liked_posts">
+            See more
+            <i class="align-middle mx-2 fa-solid fa-arrow-right-long"></i>
+        </div> -->
     </div>
-    
-    <div class="mb-5">
-        <div class="h5">Most commented posts:</div>
-        <ul class="list-group list-group-light list-group-small mb-3">
-            {% for post in most_commented_posts|slice:":3" %}
-            <li class="list-group-item border-0">
-                <a href="{% url 'post' id=post.id %}" class="fw-bold text-decoration-none align-middle">
-                    {{ post.content }} ({{ post.num_of_comments }} comments)
-                </a>
-            </li>
-            {% endfor %}
-            <li class="list-group-item border-0" role="button" data-mdb-toggle="modal" data-mdb-target="#most_commented_posts">
-                See
-                more</li>
-        </ul>
+</div>
+
+<!-- Most commented post -->
+<div class="lh-sm">
+    <div class="h5 px-2 text-primary">Most commented posts</div>
+    <div class="list-group list-group-light list-group-small">
+        {% for post in most_commented_posts|slice:":3" %}
+        <div class="post p-2 border-bottom small">
+            <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none align-middle">
+                <div class="text-primary fw-bold">{{ post.poster.username }}</div>
+                <span class="fw-bold">{{ post.num_of_comments }} comments</span>
+                <span class="mx-1 align-middle">&#183;</span>
+                {{ post.content }}
+            </a>
+        </div>
+        {% endfor %}
+        <div class="fw-bold post p-2 border-bottom" role="button" data-mdb-toggle="modal" data-mdb-target="#most_commented_posts">
+            <i class="align-middle me-3 fa-solid fa-arrow-right-long"></i>
+            See more
+        </div>
+
+        <!-- <div class="btn btn-secondary btn-rounded shadow-sm mt-3" role="button" data-mdb-toggle="modal" data-mdb-target="#most_commented_posts">
+            See more
+            <i class="align-middle mx-2 fa-solid fa-arrow-right-long"></i>
+        </div> -->
     </div>
-        
 </div>
 
 
-<!-- Most followed user -->
+<!-- Modal: Most followed user -->
 <!-- <div class="modal top fade" id="most_followed_users" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -69,7 +87,7 @@
     </div>
 </div> -->
 
-<!-- Most liked post -->
+<!-- Modal: Most liked post -->
 <div class="modal top fade" id="most_liked_posts" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
     data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -77,11 +95,14 @@
             <div class="p-5">
                 <div class="col-auto">
                     {% for post in most_liked_posts %}
-                    <div class="mb-4">
-                        <a href="{% url 'post' id=post.id %}" class="text-decoration-none align-middle">
-                            <span class="fw-bold me-2">{{ post.poster.username }}:</span> {{ post.content }} ({{ post.num_of_likes }} likes)
-                        </a>
-                    </div>
+                    <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none">
+                        <div class="p-2 post border-bottom">
+                            <div class="text-primary fw-bold">{{ post.poster.username }}</div>
+                            <span class="fw-bold">{{ post.num_of_likes }} likes</span>
+                            <span class="mx-1 align-middle">&#183;</span>
+                            <span>{{ post.content }}</span>
+                        </div>
+                    </a>
                     {% endfor %}
                 </div>
             </div>
@@ -89,7 +110,7 @@
     </div>
 </div>
 
-<!-- Most commented post -->
+<!-- Modal: Most commented post -->
 <div class="modal top fade" id="most_commented_posts" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
     data-mdb-backdrop="true" data-mdb-keyboard="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -97,12 +118,14 @@
             <div class="p-5">
                 <div class="col-auto">
                     {% for post in most_commented_posts %}
-                    <div class="mb-5">
-                        <a href="{% url 'post' id=post.id %}"
-                            class="text-decoration-none align-middle">
-                            <span class="fw-bold me-2">{{ post.poster.username }}:</span> {{ post.content }} ({{ post.num_of_comments }} comments)
-                        </a>
-                    </div>
+                    <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none">
+                        <div class="p-2 post border-bottom">
+                            <div class="text-primary fw-bold">{{ post.poster.username }}</div>
+                            <span class="fw-bold">{{ post.num_of_comments }} comments</span>
+                            <span class="mx-1 align-middle">&#183;</span>
+                            <span>{{ post.content }}</span>
+                        </div>
+                    </a>
                     {% endfor %}
                 </div>
             </div>

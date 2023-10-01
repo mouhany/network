@@ -1,52 +1,49 @@
 {% extends "network/layout.html" %}
 
-{% block body %}
+{% block sidebar_left %}
+    {% include "network/sidebar_left.html" %}
+{% endblock %}
 
-{% include "network/sidebar_left.html" %}
-
-<!-- Main -->
-<div class="col-lg-7 col-md-6 col-sm-9">
-    <div class="overflow-auto px-3" style="max-height:100vh;">
-        <div>
-        {% include "network/profile_info.html" with profile=profile %}
-        </div>
-        <!-- Tabs navs -->
-        <div class="sticky-top">
-            <ul class="nav nav-tabs nav-fill mb-3 border-bottom" id="ex1" role="tablist">
-                <li class="nav-item transparan" role="presentation">
-                    <a class="nav-link active" id="posts_tab" data-mdb-toggle="tab" href="#all_posts" role="tab"
-                        aria-controls="ex2-tabs-1" aria-selected="true">Posts</a>
-                </li>
-                <li class="nav-item transparan" role="presentation">
-                    <a class="nav-link" id="likes_tab" data-mdb-toggle="tab" href="#all_likes" role="tab"
-                        aria-controls="ex2-tabs-2" aria-selected="false">Likes</a>
-                </li>
-                <li class="nav-item transparan" role="presentation">
-                    <a class="nav-link" id="comments_tab" data-mdb-toggle="tab" href="#all_comments" role="tab" aria-controls="ex2-tabs-2"
-                        aria-selected="false">Comments</a>
-                </li>
-            </ul>
-        </div>
-        
-        <!-- Tabs content -->
-        <div class="tab-content" id="ex2-content">
-            <!-- Posts -->
-            <div class="tab-pane fade show active mb-4" id="all_posts" role="tabpanel" aria-labelledby="posts_tab">
-                {% include "network/posts.html" with posts=posts %}
-            </div>
-            <!-- Likes -->
-            <div class="tab-pane fade mb-4" id="all_likes" role="tabpanel" aria-labelledby="likes_tab">
-                {% include "network/posts.html" with posts=liked_posts %}
-            </div>
-            <!-- Comments -->
-            <div class="tab-pane fade mb-4" id="all_comments" role="tabpanel" aria-labelledby="comments_tab">
-                {% include "network/comments.html" with comments=comments %}
-            </div>
-        </div>
-
+{% block main %}
+    <div>
+    {% include "network/profile_info.html" with profile=profile headline="Profile" %}
     </div>
-</div>
 
-{% include "network/sidebar_right.html" %}
+    <!-- Tabs navs -->
+    <div class="sticky-top">
+        <ul class="nav nav-tabs nav-fill border-bottom" id="ex1" role="tablist">
+            <li class="nav-item transparan" role="presentation">
+                <a class="nav-link active" id="posts_tab" data-mdb-toggle="tab" href="#all_posts" role="tab"
+                    aria-controls="ex2-tabs-1" aria-selected="true">Posts</a>
+            </li>
+            <li class="nav-item transparan" role="presentation">
+                <a class="nav-link" id="likes_tab" data-mdb-toggle="tab" href="#all_likes" role="tab"
+                    aria-controls="ex2-tabs-2" aria-selected="false">Likes</a>
+            </li>
+            <li class="nav-item transparan" role="presentation">
+                <a class="nav-link" id="comments_tab" data-mdb-toggle="tab" href="#all_comments" role="tab" aria-controls="ex2-tabs-2"
+                    aria-selected="false">Comments</a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <!-- Posts -->
+        <div class="tab-pane fade show active mb-4" id="all_posts" role="tabpanel" aria-labelledby="posts_tab">
+            {% include "network/posts.html" with posts=posts %}
+        </div>
+        <!-- Likes -->
+        <div class="tab-pane fade mb-4" id="all_likes" role="tabpanel" aria-labelledby="likes_tab">
+            {% include "network/posts.html" with posts=liked_posts %}
+        </div>
+        <!-- Comments -->
+        <div class="tab-pane fade mb-4" id="all_comments" role="tabpanel" aria-labelledby="comments_tab">
+            {% include "network/comments.html" with comments=comments %}
+        </div>
+    </div>
+{% endblock %}
 
+{% block sidebar_right %}
+    {% include "network/sidebar_right.html" %}
 {% endblock %}

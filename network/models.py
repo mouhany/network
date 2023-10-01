@@ -18,7 +18,6 @@ class User(AbstractUser):
         users = User.objects.annotate(follower_count=Count('followers'))
         return users.order_by('-follower_count')
         
-    
     def __str__(self):
         return f"{self.id}. {self.username}"
 

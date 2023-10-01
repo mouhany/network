@@ -1,30 +1,25 @@
 {% extends "network/layout.html" %}
 
-{% block body %}
-
+{% block sidebar_left %}
     {% include "network/sidebar_left.html" %}
+{% endblock %}
 
-    <!-- Main -->
-    <div class="col-lg-7 col-md-6 col-sm-9">
-        <div class="overflow-auto px-3" style="max-height:100vh;">
-        <!-- <div> -->
+{% block main %}
+    {% url 'index' as index %}
+    {% url 'following' as following %}
+    {% url 'likes' as likes %}
 
-            {% url 'index' as index %}
-            {% url 'following' as following %}
-            {% url 'likes' as likes %}
+    {% if request.path == index %}
+    {% include "network/posts.html" with posts=posts headline="Home" %}
+    {% elif request.path == following %}
+    {% include "network/posts.html" with posts=posts headline="Following" %}
+    {% elif request.path == likes %}
+    {% include "network/posts.html" with posts=posts headline="Likes" %}
+    {% endif %}
 
-            {% if request.path == index %}
-            {% include "network/posts.html" with posts=posts headline="Home" %}
-            {% elif request.path == following %}
-            {% include "network/posts.html" with posts=posts headline="Following" %}
-            {% elif request.path == likes %}
-            {% include "network/posts.html" with posts=posts headline="Likes" %}
-            {% endif %}
+    {% include "network/pagination.html" with posts=posts %}
+{% endblock %}
 
-            {% include "network/pagination.html" with posts=posts %}
-        </div>
-    </div>
-
-    {% include "network/sidebar_right.html" with most_liked_posts=most_liked_posts most_followed_users=most_followed_users %}
-
+{% block sidebar_right %}
+    {% include "network/sidebar_right.html" %}
 {% endblock %}
