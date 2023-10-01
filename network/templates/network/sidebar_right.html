@@ -5,7 +5,7 @@
         {% for user in most_followed_users|slice:":3" %}
         <li class="list-group-item border-0">
             <a href="{% url 'profile' user=user.username %}" class="fw-bold text-decoration-none align-middle">
-                {{ user.username }} ({{user.num_of_followers}} followers)
+                {{ user.username }} ({{user.followers.count}} followers)
             </a>
         </li>
         {% endfor %}
@@ -23,7 +23,7 @@
         <div class="post p-2 border-bottom small">
             <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none align-middle">
                 <div class="text-primary fw-bold mb-1">{{ post.poster.username }}</div>
-                <span class="fw-bold">{{ post.num_of_likes }} likes</span>
+                <span class="fw-bold">{{ post.likers.count }} likes</span>
                 <span class="mx-1 align-middle">&#183;</span>
                 <span>{{post.content}}</span>
             </a>
@@ -33,10 +33,6 @@
             <i class="align-middle me-3 fa-solid fa-arrow-right-long"></i>
             See more
         </div>
-        <!-- <div class="btn btn-secondary btn-rounded shadow-sm mt-3" role="button" data-mdb-toggle="modal" data-mdb-target="#most_liked_posts">
-            See more
-            <i class="align-middle mx-2 fa-solid fa-arrow-right-long"></i>
-        </div> -->
     </div>
 </div>
 
@@ -48,7 +44,7 @@
         <div class="post p-2 border-bottom small">
             <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none align-middle">
                 <div class="text-primary fw-bold">{{ post.poster.username }}</div>
-                <span class="fw-bold">{{ post.num_of_comments }} comments</span>
+                <span class="fw-bold">{{ post.comments.count }} comments</span>
                 <span class="mx-1 align-middle">&#183;</span>
                 {{ post.content }}
             </a>
@@ -58,11 +54,6 @@
             <i class="align-middle me-3 fa-solid fa-arrow-right-long"></i>
             See more
         </div>
-
-        <!-- <div class="btn btn-secondary btn-rounded shadow-sm mt-3" role="button" data-mdb-toggle="modal" data-mdb-target="#most_commented_posts">
-            See more
-            <i class="align-middle mx-2 fa-solid fa-arrow-right-long"></i>
-        </div> -->
     </div>
 </div>
 
@@ -77,7 +68,7 @@
                     {% for user in most_followed_users %}
                     <li class="list-group-item border-0">
                         <a href="{% url 'profile' user=user.username %}" class="fw-bold text-decoration-none align-middle">
-                            {{ user.username }} ({{ user.num_of_followers }} followers)
+                            {{ user.username }} ({{ user.followers.count }} followers)
                         </a>
                     </li>
                     {% endfor %}
@@ -98,7 +89,7 @@
                     <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none">
                         <div class="p-2 post border-bottom">
                             <div class="text-primary fw-bold">{{ post.poster.username }}</div>
-                            <span class="fw-bold">{{ post.num_of_likes }} likes</span>
+                            <span class="fw-bold">{{ post.likers.count }} likes</span>
                             <span class="mx-1 align-middle">&#183;</span>
                             <span>{{ post.content }}</span>
                         </div>
@@ -121,7 +112,7 @@
                     <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none">
                         <div class="p-2 post border-bottom">
                             <div class="text-primary fw-bold">{{ post.poster.username }}</div>
-                            <span class="fw-bold">{{ post.num_of_comments }} comments</span>
+                            <span class="fw-bold">{{ post.comments.count }} comments</span>
                             <span class="mx-1 align-middle">&#183;</span>
                             <span>{{ post.content }}</span>
                         </div>

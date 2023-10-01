@@ -46,10 +46,10 @@
             <!-- Following & followers count -->
             <div class="d-flex justify-content-start mx-2 align-middle">
                 <div class="me-5 pe-5" role="button" data-mdb-toggle="modal" data-mdb-target="#following_{{ profile.id }}">
-                    <span class="fw-bold me-1">{{ profile.num_of_following }}</span> Following
+                    <span class="fw-bold me-1">{{ profile.following.count }}</span> Following
                 </div>
                 <div class="me-5 pe-5" role="button" data-mdb-toggle="modal" data-mdb-target="#followers_{{ profile.id }}">
-                    <span class="fw-bold me-1">{{ profile.num_of_followers }}</span> Followers
+                    <span class="fw-bold me-1">{{ profile.followers.count }}</span> Followers
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
         <div class="modal-content">
             <div class="p-5">
                 <div class="col-auto">
-                    {% if profile.num_of_followers %}
+                    {% if profile.followers.count %}
                         {% for follower in profile.followers.all %}
                         <div class="mb-5">
                             <a href="{% url 'profile' user=follower.username %}" class="fw-bold text-decoration-none align-middle">
@@ -89,7 +89,7 @@
         <div class="modal-content">
             <div class="p-5">
                 <div class="col-auto">
-                    {% if profile.num_of_following %}
+                    {% if profile.following.count %}
                         {% for following in profile.following.all %}
                         <div class="mb-5">
                             <a href="{% url 'profile' user=following.username %}" class="fw-bold text-decoration-none align-middle">

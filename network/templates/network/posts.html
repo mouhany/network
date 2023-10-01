@@ -47,8 +47,8 @@
                         data-mdb-target="#comment_modal_{{ post.id }}"></i>
                     <span class="mx-1 text-muted">&#183;</span>
                     <span role="button" data-mdb-toggle="modal" data-mdb-target="#comment_list_modal_{{ post.id }}">
-                        {% if post.num_of_comments %}
-                        {{ post.num_of_comments }}
+                        {% if post.comments.count %}
+                        {{ post.comments.count }}
                         {% else %}
                         0
                         {% endif %}
@@ -62,8 +62,8 @@
                     </i>
                     <span class="mx-1 text-muted">&#183;</span>
                     <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}">
-                        {% if post.num_of_likes %}
-                        {{ post.num_of_likes }}
+                        {% if post.likers.count %}
+                        {{ post.likers.count }}
                         {% else %}
                         0
                         {% endif %}
@@ -117,7 +117,7 @@
             <div class="modal-content">
                 <div class="p-5">
                     <div class="px-5 col-auto">
-                        {% if user.is_authenticated and post.num_of_comments %}
+                        {% if user.is_authenticated and post.comments.count %}
                         {% for comment in post.comments.all %}
                         <div class="my-3">
                             <div>{{ comment.commenter.username }}</div>
@@ -125,7 +125,7 @@
                             <div>{{ comment.commented|naturaltime}}</div>
                         </div>
                         {% endfor %}
-                        {% elif user.is_authenticated and not post.num_of_comments %}
+                        {% elif user.is_authenticated and not post.comments.count %}
                         <div class="my-3">
                             No comments yet.
                         </div>
@@ -163,13 +163,13 @@
             <div class="modal-content">
                 <div class="p-5">
                     <div class="px-5 col-auto">
-                        {% if user.is_authenticated and post.num_of_likes %}
+                        {% if user.is_authenticated and post.likers.count %}
                         {% for liker in post.likers.all %}
                         <div class="my-3">
                             <div>{{ liker.username }}</div>
                         </div>
                         {% endfor %}
-                        {% elif user.is_authenticated and not post.num_of_likes %}
+                        {% elif user.is_authenticated and not post.likers.count %}
                         <div class="my-3">
                             No likes yet.
                         </div>

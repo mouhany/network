@@ -158,6 +158,22 @@ def like(request, id):
             post.likers.add(request.user)
         return redirect("index")
 
+def follow(request, user):
+    # Follow / unfollow must be via POST request
+    if request.method != "POST":
+        return JsonResponse({
+            "error": "POST request required."
+        }, status=400)
+    
+    user = User.objects.get(username=user)
+    following = request.user.following.all()
+    if user in following:
+        following.remove(user)
+    else:
+        following.add(user)
+    return redirect("profile")
+
+
 # todo
 def edit(request, id):
     # Edit post must be via POST request
