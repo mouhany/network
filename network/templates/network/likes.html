@@ -1,0 +1,7 @@
+{% for liker in likers %}
+<div class="my-3 fw-bold">
+    <a href="{% url 'profile' user=liker.username %}">
+        {{ liker.username }}
+    </a>
+</div>
+{% endfor %}

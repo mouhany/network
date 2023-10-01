@@ -12,6 +12,7 @@
     <h5 class="text-center p-3">No posts yet.</h5>
 </div>
 {% else %}
+
 {% for post in posts %}
 <!-- Post -->
 <div class="container p-4 border-bottom post">
@@ -75,7 +76,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modals -->
 <div>
     <!-- Comment -->
@@ -118,13 +118,7 @@
                 <div class="p-5">
                     <div class="px-5 col-auto">
                         {% if user.is_authenticated and post.comments.count %}
-                        {% for comment in post.comments.all %}
-                        <div class="my-3">
-                            <div>{{ comment.commenter.username }}</div>
-                            <div>{{ comment.comment }}</div>
-                            <div>{{ comment.commented|naturaltime}}</div>
-                        </div>
-                        {% endfor %}
+                        {% include "network/comments.html" with comments=post.comments.all %}
                         {% elif user.is_authenticated and not post.comments.count %}
                         <div class="my-3">
                             No comments yet.
@@ -164,11 +158,7 @@
                 <div class="p-5">
                     <div class="px-5 col-auto">
                         {% if user.is_authenticated and post.likers.count %}
-                        {% for liker in post.likers.all %}
-                        <div class="my-3">
-                            <div>{{ liker.username }}</div>
-                        </div>
-                        {% endfor %}
+                        {% include "network/likes.html" with likers=post.likers.all %}
                         {% elif user.is_authenticated and not post.likers.count %}
                         <div class="my-3">
                             No likes yet.
@@ -185,4 +175,5 @@
     </div>
 </div>
 {% endfor %}
+
 {% endif %}
