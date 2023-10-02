@@ -37,7 +37,27 @@
                     </span>
                 </div>
                 {% if user == post.poster %}
-                <i class="fa-solid fa-ellipsis"></i>
+
+
+                <div class="dropdown">
+                    <a href="#" role="button" id="edit_delete" data-mdb-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="edit_delete">
+                        <li><a class="dropdown-item" href="{% url 'edit' id=post.id %}">Edit (not yet)</a></li>
+                        <li>
+                            <form action="{% url 'delete' id=post.id %}" method="post">
+                                {% csrf_token %}
+                                <input class="dropdown-item" type="submit" value="Delete">
+                            </form>
+                            <a class="dropdown-item" href="{% url 'delete' id=post.id %}">
+                                Delete link (not working)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
                 {% endif %}
             </div>
             <div class="my-2">{{ post.content }}</div>
@@ -166,6 +186,25 @@
                         {% elif not user.is_authenticated %}
                         <div class="my-3">
                             <div>You must <a href="{% url 'login'%}">Log In</a> to view this.</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit -->
+    <div class="modal top fade" id="edit_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="p-5">
+                    <div class="px-5 col-auto">
+                        {% if user.is_authenticated and user == post.poster %}
+                        Textarea here
+                        {% elif not user.is_authenticated or not user == post.poster %}
+                        <div class="my-3">
+                            <div>You are not authorized to do edit this post.</div>
                         </div>
                         {% endif %}
                     </div>

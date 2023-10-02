@@ -80,6 +80,13 @@ def profile(request, user):
     profile_posts = Post.objects.filter(poster=profile)
     profile_likes = Post.objects.filter(likers=profile)
     profile_comments = Comment.objects.filter(commenter=profile)
+    
+    # Check if profile is followed by request.user
+    if request.user.is_authenticated and profile in request.user.following.all():
+        is_followed = True
+    else:
+        is_followed = False
+    
     return render(request, "network/profile.html", {
         "most_followed_users": most_followed_users,
         "most_liked_posts": most_liked_posts,
@@ -88,6 +95,7 @@ def profile(request, user):
         "posts": profile_posts,
         "liked_posts": profile_likes,
         "comments": profile_comments,
+        "is_followed": is_followed
     })
 
 
@@ -149,36 +157,57 @@ def post(request, id):
     
 # todo
 def like(request, id):
-    if request.method == "POST":
-        post = Post.objects.get(pk=id)
-        posts_liked = request.user.likes.all()
-        if post in posts_liked:
-            post.likers.remove(request.user)
-        else:
-            post.likers.add(request.user)
-        return redirect("index")
+    # Follow must be via POST request
+    if request.method != "POST":
+        return JsonResponse({
+            "error": "POST request required."
+        }, status=400)
+        
+    post = Post.objects.get(pk=id)
+    posts_liked = request.user.likes.all()
+    if post in posts_liked:
+        post.likers.remove(request.user)
+    else:
+        post.likers.add(request.user)
+    return redirect("index")
+
 
 def follow(request, user):
-    # Follow / unfollow must be via POST request
+    # Follow must be via POST request
     if request.method != "POST":
         return JsonResponse({
             "error": "POST request required."
         }, status=400)
     
-    user = User.objects.get(username=user)
-    following = request.user.following.all()
-    if user in following:
-        following.remove(user)
+    profile = User.objects.get(username=user)
+    following_list = request.user.following.all()
+    
+    if request.user.is_authenticated and profile in following_list:
+        # If profile is followed by request.user,
+        # clicking on button will remove profile from following_list
+        request.user.following.remove(profile)
     else:
-        following.add(user)
-    return redirect("profile")
+        request.user.following.add(profile)
+    return redirect("profile", user=profile.username)
 
+# todo
+def delete(request, id):
+    if request.method != "POST":
+        return JsonResponse({
+            "error": "POST request required."
+        }, status=400)
+    post = Post.objects.get(pk=id)
+    if request.user == post.poster.username:
+        post.delete()
+    return redirect("index")
 
 # todo
 def edit(request, id):
     # Edit post must be via POST request
     if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({
+            "error": "POST request required."
+        }, status=400)
     pass
 
 # todo

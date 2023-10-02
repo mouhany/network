@@ -9,116 +9,127 @@
     <div class="row p-4">
         <!-- Icon -->
         <a href="{% url 'profile' user=profile.username %}" class="col-auto mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" height="5em" fill="currentColor" class="text-primary align-middle bi bi-person-circle" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" height="5em" fill="currentColor" class="text-primary bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
             </svg>
         </a>
-        <div class="col p-0 mx-2">
-            <!-- Username and date joined -->
-            <div class="d-flex justify-content-start mx-2 align-middle">
-                <a href="{% url 'profile' user=profile.username %}" class="h4 m-0 fw-bold text-decoration-none align-middle">
-                    {{ profile.username }}
-                </a>
-                <span class="small text-muted opacity-50 align-middle">
-                    <span class="align-middle mx-2">&#183;</span>
-                    <span class="small align-middle"><i class="fa-regular fa-calendar-days me-2"></i>Joined {{profile.date_joined.date|date:"F Y"}}</span>
-                </span>
+        <div class="col-auto align-self-center px-2 mb-3">
+            <div class="px-2 d-flex justify-content-between align-items-center mb-3">
+                <!-- Username and date joined -->
+                <div class="d-flex justify-content-start">
+                    <a href="{% url 'profile' user=profile.username %}" class="h4 m-0 fw-bold text-decoration-none align-middle">
+                        {{ profile.username }}
+                    </a>
+                    <span class="small text-muted opacity-50 align-self-center">
+                        <span class="align-middle mx-2">&#183;</span>
+                        <span class="align-middle small"><i class="fa-regular fa-calendar-days me-2"></i>Joined {{profile.date_joined.date|date:"F Y"}}</span>
+                    </span>
+                </div>
             </div>
-            <!-- Follow / following button -->
-            <div class="d-flex justify-content-start mx-2 align-middle">
+            <!-- Following & followers count -->
+            <div class="px-2 d-flex justify-content-between align-items-center">
+                <div role="button" data-mdb-toggle="modal" data-mdb-target="#following_{{ profile.id }}">
+                    <span class="fw-bold me-2">{{ profile.following.count }}</span>Following
+                </div>
+                <div role="button" data-mdb-toggle="modal" data-mdb-target="#followers_{{ profile.id }}">
+                    <span class="fw-bold me-2">{{ profile.followers.count }}</span>Followers
+                </div>
+            </div>
+        </div>
+        <!-- Following / follow button -->
+        <div class="col-auto align-self-top px-2 mb-3">
+            <div>
                 {% if not user.is_authenticated %}
-                <button class="btn btn-secondary btn-rounded shadow-sm my-3" role="button" data-mdb-toggle="modal" data-mdb-target="#follow">
+                <!-- This button triggers modal -->
+                <button class="btn btn-secondary btn-rounded shadow-sm" role="button" data-mdb-toggle="modal"
+                    data-mdb-target="#follow">
                     Follow
                 </button>
                 {% elif user.is_authenticated and user.username != profile.username %}
-                <button class="btn btn-secondary btn-rounded shadow-sm my-3">
-                    {% if profile.username in user.following %}
-                    Unfollow
-                    {% else %}
-                    Follow
-                    {% endif %}
-                </button>
-                {% else %}
-                <div class="my-3"></div>
+                <form action="{% url 'follow' user=profile.username %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-secondary btn-rounded shadow-sm">
+                        {% if is_followed %}
+                        Following
+                        {% else %}
+                        Follow
+                        {% endif %}
+                    </button>
+                </form>
                 {% endif %}
-            </div>
-            <!-- Following & followers count -->
-            <div class="d-flex justify-content-start mx-2 align-middle">
-                <div class="me-5 pe-5" role="button" data-mdb-toggle="modal" data-mdb-target="#following_{{ profile.id }}">
-                    <span class="fw-bold me-1">{{ profile.following.count }}</span> Following
-                </div>
-                <div class="me-5 pe-5" role="button" data-mdb-toggle="modal" data-mdb-target="#followers_{{ profile.id }}">
-                    <span class="fw-bold me-1">{{ profile.followers.count }}</span> Followers
-                </div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal -->
-<!-- List of followers -->
-<div class="modal top fade" id="followers_{{ profile.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="p-5">
-                <div class="col-auto">
-                    {% if profile.followers.count %}
+<div>
+    <!-- List of followers -->
+    <div class="modal top fade" id="followers_{{ profile.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="p-5">
+                    <div class="col-auto">
+                        {% if profile.followers.count %}
                         {% for follower in profile.followers.all %}
                         <div class="mb-5">
-                            <a href="{% url 'profile' user=follower.username %}" class="fw-bold text-decoration-none align-middle">
+                            <a href="{% url 'profile' user=follower.username %}"
+                                class="fw-bold text-decoration-none align-middle">
                                 {{ follower.username }}
                             </a>
                         </div>
                         {% endfor %}
-                    {% else %}
-                    <div class="my-3">
-                        No followers yet
+                        {% else %}
+                        <div class="my-3">
+                            No followers yet
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- List of following -->
-<div class="modal top fade" id="following_{{ profile.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="p-5">
-                <div class="col-auto">
-                    {% if profile.following.count %}
+    <!-- List of following -->
+    <div class="modal top fade" id="following_{{ profile.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="p-5">
+                    <div class="col-auto">
+                        {% if profile.following.count %}
                         {% for following in profile.following.all %}
                         <div class="mb-5">
-                            <a href="{% url 'profile' user=following.username %}" class="fw-bold text-decoration-none align-middle">
+                            <a href="{% url 'profile' user=following.username %}"
+                                class="fw-bold text-decoration-none align-middle">
                                 {{ following.username }}
                             </a>
                         </div>
                         {% endfor %}
-                    {% else %}
-                    <div class="my-3">
-                        Not following anyone yet
+                        {% else %}
+                        <div class="my-3">
+                            Not following anyone yet
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Follow button if not user.is_authenticated -->
-<div class="modal top fade" id="follow" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="p-5">
-                <div class="col-auto">
-                    {% if not user.is_authenticated %}
-                    <div class="my-3">
-                        <div>You must <a href="{% url 'login'%}">Log In</a> first.</div>
+    <!-- Follow button if not user.is_authenticated -->
+    <div class="modal top fade" id="follow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="p-5">
+                    <div class="col-auto">
+                        {% if not user.is_authenticated %}
+                        <div class="my-3">
+                            <div>You must <a href="{% url 'login'%}">Log In</a> first.</div>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
