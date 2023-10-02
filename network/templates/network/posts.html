@@ -36,9 +36,10 @@
                         <span class="small align-middle">{{ post.date_posted|naturaltime }}</span>
                     </span>
                 </div>
+
+
+                <!-- Edit / delete (not yet) -->
                 {% if user == post.poster %}
-
-
                 <div class="dropdown">
                     <a href="#" role="button" id="edit_delete" data-mdb-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis"></i>
@@ -56,11 +57,15 @@
                         </li>
                     </ul>
                 </div>
-
-
                 {% endif %}
+
+
             </div>
-            <div class="my-2">{{ post.content }}</div>
+
+            <a href="{% url 'post' id=post.id %}">
+                <div class="my-2 text-body">{{ post.content }}</div>
+            </a>
+            
             <div class="d-flex justify-content-start align-items-center">
                 <!-- Comment -->
                 <span class="pe-5">
@@ -101,10 +106,10 @@
     <!-- Comment -->
     <div class="modal top fade" id="comment_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-        <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="p-5">
-                    <div class="px-5 col-auto">
+                    <div class="col-auto">
                         {% if user.is_authenticated %}
                         <form action="{% url 'comment' id=post.id %}" method="post">
                             {% csrf_token %}
@@ -156,10 +161,10 @@
     <!-- Likes (if not user.is_authenticated) -->
     <div class="modal top fade" id="like_post_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
-        <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="p-5">
-                    <div class="px-5 col-auto">
+                    <div class="col-auto">
                         {% if not user.is_authenticated %}
                         <div class="my-3">
                             <div>You must <a href="{% url 'login'%}">Log In</a> to like a post.</div>
