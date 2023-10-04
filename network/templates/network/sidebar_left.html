@@ -186,19 +186,31 @@
         
         <a href="{% url 'likes' %}" class="btn btn-light btn-rounded shadow-sm">Likes</a>
         <hr>
-        <div class="btn-group shadow-0">
+        
+        <!-- <div class="btn-group shadow-0">
+
             <a href="{% url 'profile' user=user.username %}" class="btn btn-secondary btn-rounded shadow-sm">{{ user.username }}</a>
-            <button type="button" class="btn btn-secondary btn-rounded shadow-sm dropdown-toggle dropdown-toggle-split" data-mdb-toggle="dropdown"
-                aria-expanded="false">
+
+            <button type="button" class="btn btn-secondary btn-rounded shadow-sm dropdown-toggle dropdown-toggle-split" data-mdb-toggle="dropdown" aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
             </button>
+
             <ul class="dropdown-menu">
-                <li><a href="{% url 'settings' %}" class="dropdown-item">Settings</a></li>
-                <li>
-                    <hr class="dropdown-divider" />
-                </li>
+                <li><a href="{% url 'profile' user=user.username %}" class="dropdown-item">My Profile</a></li>
                 <li><a href="{% url 'logout' %}" class="dropdown-item">Log Out</a></li>
             </ul>
-        </div>
+
+        </div> -->
+
+        <button class="btn btn-secondary btn-rounded shadow-sm" type="button" id="my_account" data-mdb-toggle="dropdown"
+            aria-expanded="false">
+            {{ user.username }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="my_account">
+            <li><a href="{% url 'profile' user=user.username %}" class="dropdown-item">My Profile</a></li>
+            <li><a href="{% url 'logout' %}" class="dropdown-item">Log Out</a></li>
+        </ul>
+        
+        <hr>
         {% endif %}
     </div>

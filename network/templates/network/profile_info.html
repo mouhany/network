@@ -5,16 +5,16 @@
 </div>
 {% endif %}
 
-<div class="container p-0">
+<div class="container">
     <div class="row p-4">
         <!-- Icon -->
-        <a href="{% url 'profile' user=profile.username %}" class="col-auto mb-3">
+        <a href="{% url 'profile' user=profile.username %}" class="col-auto p-0 mb-3">
             <svg xmlns="http://www.w3.org/2000/svg" height="5em" fill="currentColor" class="text-primary bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
             </svg>
         </a>
-        <div class="col-auto align-self-center px-2 mb-3">
+        <div class="col-auto align-self-center mb-3">
             <div class="px-2 d-flex justify-content-between align-items-center mb-3">
                 <!-- Username and date joined -->
                 <div class="d-flex justify-content-start">
@@ -38,7 +38,7 @@
             </div>
         </div>
         <!-- Following / follow button -->
-        <div class="col-auto align-self-top px-2 mb-3">
+        <div class="col-auto p-0 align-self-top mb-3">
             <div>
                 {% if not user.is_authenticated %}
                 <!-- This button triggers modal -->

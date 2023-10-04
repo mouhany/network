@@ -13,7 +13,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     
     path("create", views.create, name="create"),
-    path("settings", views.settings, name="settings"),
+    # path("settings", views.settings, name="settings"),
     path("profile/<str:user>", views.profile, name="profile"),
     path("comment/<int:id>", views.comment, name="comment"),
     path("like/<int:id>", views.like, name="like"),

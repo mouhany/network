@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
+import json
 
 from .models import User, Post, Comment
 
@@ -127,7 +128,7 @@ def comment(request, id):
         commenter=request.user
     )
     new_comment.save()
-    return redirect("index")
+    return redirect("post", id=id)
 
 
 def post(request, id):
@@ -192,27 +193,30 @@ def follow(request, user):
 
 # todo
 def delete(request, id):
-    if request.method != "POST":
-        return JsonResponse({
-            "error": "POST request required."
-        }, status=400)
+    # if request.method != "POST":
+    #     return JsonResponse({
+    #         "error": "POST request required."
+    #     }, status=400)
     post = Post.objects.get(pk=id)
-    if request.user == post.poster.username:
+    if request.method == "POST" and request.user == post.poster.username:
         post.delete()
-    return redirect("index")
+    return redirect("profile", user=post.poster.username)
 
-# todo
+# done but need to incorporate js for better ux 
 def edit(request, id):
     # Edit post must be via POST request
     if request.method != "POST":
         return JsonResponse({
             "error": "POST request required."
         }, status=400)
-    pass
-
-# todo
-def settings(request):
-    pass
+    
+    data = json.loads(request.body)
+    post = Post.objects.get(pk=id)
+    post.content = data[""]
+    
+    edited_content = request.POST["edited_content"]
+    edit_post = Post.objects.filter(pk=id).update(content=edited_content, edited=True)
+    return redirect("index")
 
 ################################################
 
