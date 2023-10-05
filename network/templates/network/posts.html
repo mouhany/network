@@ -9,14 +9,16 @@
 
 {% if not posts %}
 <div class="container p-0">
-    <h5 class="text-center p-3">No posts yet.</h5>
+    <h5 class="text-center p-3">
+        No posts yet.
+    </h5>
 </div>
 {% else %}
-
 {% for post in posts %}
 <!-- Post -->
 <div class="container border-bottom post">
     <div class="row p-4">
+
         <!-- Icon -->
         <div class="col-auto p-0">
             <a href="{% url 'profile' user=post.poster.username %}">
@@ -29,23 +31,26 @@
             </a>
         </div>
 
+        <!-- Username, date posted, post content, comment, like -->
         <div class="col align-self-center">
-            <!-- Username, date posted, and post content -->
             <a class="row" href="{% url 'post' id=post.id %}">
                 <div class="d-flex justify-content-start">
+                    <!-- Username -->
                     <div class="text-primary fw-bold text-decoration-none align-middle">
                         {{ post.poster.username }}
                     </div>
+                    <!-- Date posted -->
                     <div class="small text-muted opacity-50 align-self-center">
                         <span class="mx-2 align-self-center">&#183;</span>
                         <span class="small align-self-center">{{ post.date_posted|naturaltime }}</span>
-                        <span class="ms-2 small align-self-center fst-italic">
+                        <span class="ms-2 small align-self-center fst-italic" id="editedStatus_{{ post.id }}">
                             {% if post.edited %}
                             (edited)
                             {% endif %}
                         </span>
                     </div>
                 </div>
+                <!-- Post content -->
                 <div class="my-2 text-body" id="og_{{post.id}}">{{ post.content }}</div>
             </a>
             <!-- Comment and like -->
@@ -88,7 +93,7 @@
             </div>
         </div>
 
-        <!-- Edit and delete dropdown -->
+        <!-- Edit -->
         {% if user.is_authenticated %}
             <div 
             {% if user == post.poster %}
@@ -106,13 +111,11 @@
                             <div class="dropdown-item" role="button" data-mdb-toggle="modal" data-mdb-target="#edit_{{ post.id }}">Edit
                             </div>
                         </li>
-                        <!-- <li>
-                            <input class="dropdown-item" type="submit" value="Delete" data-id="{{ post.id }}" id="deletebutton">
-                        </li> -->
                     </ul>
                 </div>
             </div>
         {% endif %}
+
     </div>
 </div>
 
@@ -126,18 +129,14 @@
                 <div class="p-5">
                     <div class="col-auto">
                         {% if user.is_authenticated %}
-                        <!-- <form action="{% url 'edit' id=post.id %}" method="post"> -->
                             {% csrf_token %}
                             <div class="d-grid gap-3">
                                 <div class="form-outline">
-                                    <!-- <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2" name="edited_content" autofocus >{{ post.content }}</textarea> -->
                                     <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2" autofocus>{{ post.content }}</textarea>
                                     <label class="form-label" for="edit_post_{{ post.id }}">Edit post:</label>
                                 </div>
                                 <button class="btn btn-secondary btn-rounded shadow-sm text-center" type="button" data-mdb-dismiss="modal" onclick="saveChanges({{ post.id }})">Save</button>
-                                <!-- <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit" value="Save"> -->
                             </div>
-                        <!-- </form> -->
                         {% else %}
                         <div class="my-3">
                             <div>You must <a href="{% url 'login'%}">Log In</a> to comment.</div>
@@ -145,7 +144,6 @@
                         {% endif %}
                     </div>
                 </div>
-    
             </div>
         </div>
     </div>
@@ -232,6 +230,6 @@
         </div>
     </div>
 </div>
-{% endfor %}
 
+{% endfor %}
 {% endif %}
