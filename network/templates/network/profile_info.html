@@ -7,6 +7,7 @@
 
 <div class="container">
     <div class="row p-4">
+
         <!-- Icon -->
         <a href="{% url 'profile' user=profile.username %}" class="col-auto p-0 mb-3">
             <svg xmlns="http://www.w3.org/2000/svg" height="5em" fill="currentColor" class="text-primary bi bi-person-circle" viewBox="0 0 16 16">
@@ -14,9 +15,11 @@
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
             </svg>
         </a>
+
         <div class="col-auto align-self-center mb-3">
+
+            <!-- Username and date joined -->
             <div class="px-2 d-flex justify-content-between align-items-center mb-3">
-                <!-- Username and date joined -->
                 <div class="d-flex justify-content-start">
                     <a href="{% url 'profile' user=profile.username %}" class="h4 m-0 fw-bold text-decoration-none align-middle">
                         {{ profile.username }}
@@ -27,6 +30,7 @@
                     </span>
                 </div>
             </div>
+
             <!-- Following & followers count -->
             <div class="px-2 d-flex justify-content-between align-items-center">
                 <div role="button" data-mdb-toggle="modal" data-mdb-target="#following_{{ profile.id }}">
@@ -36,7 +40,9 @@
                     <span class="fw-bold me-2">{{ profile.followers.count }}</span>Followers
                 </div>
             </div>
+
         </div>
+
         <!-- Following / follow button -->
         <div class="col-auto p-0 align-self-top mb-3">
             <div>
@@ -60,6 +66,7 @@
                 {% endif %}
             </div>
         </div>
+        
     </div>
 </div>
 
