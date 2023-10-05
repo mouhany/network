@@ -85,6 +85,7 @@
         <div class="modal-content">
             <div class="p-5">
                 <div class="col-auto">
+                    <div class="h5 px-2 pb-3 text-primary sticky-top transparan">Most liked posts</div>
                     {% for post in most_liked_posts %}
                     <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none">
                         <div class="p-2 post border-bottom">
@@ -108,6 +109,7 @@
         <div class="modal-content">
             <div class="p-5">
                 <div class="col-auto">
+                    <div class="h5 px-2 pb-3 text-primary">Most commented posts</div>
                     {% for post in most_commented_posts %}
                     <a href="{% url 'post' id=post.id %}" class="text-body text-decoration-none">
                         <div class="p-2 post border-bottom">

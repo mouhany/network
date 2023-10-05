@@ -11,39 +11,79 @@
     </div>
 
     <!-- Post -->
-    <div class="transparan container p-0 border-bottom">
+    <div class="container border-bottom">
         <div>
             <div class="px-4 pt-3 border-bottom">
                 <div class="row">
-                    <a href="{% url 'profile' user=post.poster.username %}" class="col-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="4em" fill="currentColor"
-                            class="text-primary align-middle bi bi-person-circle" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                            <path fill-rule="evenodd"
-                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                        </svg>
-                    </a>
-                    <div class="col p-0">
-                        <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- Icon -->
+                    <div class="col-auto p-0">
+                        <a href="{% url 'profile' user=post.poster.username %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="4em" fill="currentColor"
+                                class="text-primary align-middle bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                <path fill-rule="evenodd"
+                                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="col align-self-center">
+                        <!-- <div class="d-flex justify-content-between align-items-center"> -->
                             <div>
                                 <a href="{% url 'profile' user=post.poster.username %}" class="fw-bold text-decoration-none align-middle">
                                     {{ post.poster.username }}
                                 </a>
                             </div>
-                            {% if user == post.poster %}
-                            <i class="fa-solid fa-ellipsis"></i>
-                            {% endif %}
-                        </div>
-                        <div class="py-3 blockquote">{{ post.content }}</div>
+                            
+
+                        <!-- </div> -->
+                        <div class="py-3 blockquote" id="og_{{post.id}}">{{ post.content }}</div>
                     </div>
+
+                    <!-- Edit and delete dropdown -->
+                    {% if user.is_authenticated %}
+                        <div 
+                        {% if user == post.poster %} 
+                            class="col-auto p-0 align-self-top" 
+                        {% else %}
+                            class="col-auto p-0 align-self-top invisible" 
+                        {% endif %}
+                        >
+                            <div class="dropdown">
+                                <a href="#" role="button" id="edit_delete" data-mdb-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="edit_delete">
+                                    <li>
+                                        <div class="dropdown-item" role="button" data-mdb-toggle="modal" data-mdb-target="#edit_{{ post.id }}">
+                                            Edit
+                                        </div>
+                                    </li>
+                                    <!-- <li>
+                                                    <input class="dropdown-item" type="submit" value="Delete" data-id="{{ post.id }}" id="deletebutton">
+                                                </li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
                 
             </div>
             <div class="border-bottom py-2 px-4">
                 <div class="small text-muted opacity-50">
                     {{ post.date_posted.time|date:"h:i"}}
-                    <span class="mx-1 align-middle">&#183;</span>
+                    <span class="mx-1 align-self-center">&#183;</span>
                     {{post.date_posted.date|date:"l, F j, Y"}}
+                    <!-- <span class="small text-muted opacity-50 align-middle"> -->
+                    <span class="mx-1 align-self-center">&#183;</span>
+                    <span class="small align-self-center fst-italic" id="editedStatus_{{ post.id }}">
+                        {% if post.edited %}
+                        (edited)
+                        {% endif %}
+                    </span>
+                    <!-- </span> -->
                 </div>
             </div>
             <div class="px-4 py-2 d-flex justify-content-start align-items-center">
@@ -59,9 +99,15 @@
                 </div>
                 <!-- Likes -->
                 <div class="px-5">
-                    <i {% if user.is_authenticated and user in post.likers.all %} class="fa-solid fa-heart" {% elif
-                        user.is_authenticated %} class="fa-regular fa-heart" {% else %} class="fa-regular fa-heart"
-                        role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" {% endif %}>
+                    <i 
+                    {% if user.is_authenticated and user in post.likers.all %} 
+                        class="fa-solid fa-heart text-danger" 
+                    {% elif user.is_authenticated %} 
+                        class="fa-regular fa-heart" 
+                    {% else %} 
+                        class="fa-regular fa-heart" role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" 
+                    {% endif %}
+                    >
                     </i>
                     <span class="mx-1 text-muted">&#183;</span>
                     <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}">
@@ -108,6 +154,40 @@
     
     <!-- Modals -->
     <div>
+        <!-- Edit -->
+        <div class="modal top fade" id="edit_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            data-mdb-backdrop="true" data-mdb-keyboard="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="p-5">
+                        <div class="col-auto">
+                            {% if user.is_authenticated %}
+                            <!-- <form action="{% url 'edit' id=post.id %}" method="post"> -->
+                            {% csrf_token %}
+                            <div class="d-grid gap-3">
+                                <div class="form-outline">
+                                    <!-- <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2" name="edited_content" autofocus >{{ post.content }}</textarea> -->
+                                    <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2"
+                                        autofocus>{{ post.content }}</textarea>
+                                    <label class="form-label" for="edit_post_{{ post.id }}">Edit post:</label>
+                                </div>
+                                <button class="btn btn-secondary btn-rounded shadow-sm text-center" type="button" data-mdb-dismiss="modal" onclick="saveChanges({{ post.id }})">
+                                    Save
+                                </button>
+                                <!-- <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit" value="Save"> -->
+                            </div>
+                            <!-- </form> -->
+                            {% else %}
+                            <div class="my-3">
+                                <div>You must <a href="{% url 'login'%}">Log In</a> to comment.</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
         <!-- Comment form -->
         <div class="modal top fade" id="comment_modal_{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">

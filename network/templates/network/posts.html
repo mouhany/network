@@ -1,20 +1,4 @@
 {% load humanize %}
-<!-- Move script to external file -->
-<script>
-    function saveChanges(id) {
-        let csrf = "{{ csrf_token }}";
-        const csrftoken = Cookies.get('csrftoken');
-        let editedContent = document.querySelector(`#edit_post_${id}`).value;
-
-        console.log(editedContent);
-        console.log(`csrf ${csrf}`);
-        console.log(`csrftoken ${csrftoken}`)
-        fetch(`/edit/${id}/`, {
-            method: "POST",
-
-        })
-    }
-</script>
 
 <!-- Headline -->
 {% if headline %}
@@ -52,12 +36,17 @@
                     <div class="text-primary fw-bold text-decoration-none align-middle">
                         {{ post.poster.username }}
                     </div>
-                    <div class="small text-muted opacity-50 align-middle">
-                        <span class="mx-2 align-middle">&#183;</span>
-                        <span class="small align-middle">{{ post.date_posted|naturaltime }}</span>
+                    <div class="small text-muted opacity-50 align-self-center">
+                        <span class="mx-2 align-self-center">&#183;</span>
+                        <span class="small align-self-center">{{ post.date_posted|naturaltime }}</span>
+                        <span class="ms-2 small align-self-center fst-italic">
+                            {% if post.edited %}
+                            (edited)
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
-                <div class="my-2 text-body">{{ post.content }}</div>
+                <div class="my-2 text-body" id="og_{{post.id}}">{{ post.content }}</div>
             </a>
             <!-- Comment and like -->
             <div class="row">
@@ -114,14 +103,12 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="edit_delete">
                         <li>
-                            <div class="dropdown-item" role="button" data-mdb-toggle="modal" data-mdb-target="#edit_{{ post.id }}">Edit</div>
+                            <div class="dropdown-item" role="button" data-mdb-toggle="modal" data-mdb-target="#edit_{{ post.id }}">Edit
+                            </div>
                         </li>
-                        <li>
-                            <form action="{% url 'delete' id=post.id %}" method="post">
-                                {% csrf_token %}
-                                <input class="dropdown-item" type="submit" value="Delete">
-                            </form>
-                        </li>
+                        <!-- <li>
+                            <input class="dropdown-item" type="submit" value="Delete" data-id="{{ post.id }}" id="deletebutton">
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -144,14 +131,11 @@
                             <div class="d-grid gap-3">
                                 <div class="form-outline">
                                     <!-- <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2" name="edited_content" autofocus >{{ post.content }}</textarea> -->
-                                    <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2" autofocus>
-                                        {{ post.content }}
-                                    </textarea>
+                                    <textarea class="form-control shadow-sm active" id="edit_post_{{ post.id }}" rows="2" autofocus>{{ post.content }}</textarea>
                                     <label class="form-label" for="edit_post_{{ post.id }}">Edit post:</label>
                                 </div>
-                                <button class="btn btn-secondary btn-rounded shadow-sm text-center" type="button" onclick="saveChanges({{ post.id }})">Save</button>
-                                <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit"
-                                    value="Save">
+                                <button class="btn btn-secondary btn-rounded shadow-sm text-center" type="button" data-mdb-dismiss="modal" onclick="saveChanges({{ post.id }})">Save</button>
+                                <!-- <input class="btn btn-secondary btn-rounded shadow-sm text-center" type="submit" value="Save"> -->
                             </div>
                         <!-- </form> -->
                         {% else %}

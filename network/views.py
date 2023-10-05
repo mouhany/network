@@ -191,17 +191,6 @@ def follow(request, user):
         request.user.following.add(profile)
     return redirect("profile", user=profile.username)
 
-# todo
-def delete(request, id):
-    # if request.method != "POST":
-    #     return JsonResponse({
-    #         "error": "POST request required."
-    #     }, status=400)
-    post = Post.objects.get(pk=id)
-    if request.method == "POST" and request.user == post.poster.username:
-        post.delete()
-    return redirect("profile", user=post.poster.username)
-
 # done but need to incorporate js for better ux 
 def edit(request, id):
     # Edit post must be via POST request
@@ -210,13 +199,46 @@ def edit(request, id):
             "error": "POST request required."
         }, status=400)
     
-    data = json.loads(request.body)
+    # Get current post
     post = Post.objects.get(pk=id)
-    post.content = data[""]
     
-    edited_content = request.POST["edited_content"]
-    edit_post = Post.objects.filter(pk=id).update(content=edited_content, edited=True)
-    return redirect("index")
+    # Get new content for current post
+    data = json.loads(request.body)
+    
+    # Save new content to current post
+    post.content = data["content"]
+    post.edited = True
+    post.save()
+    
+    return JsonResponse({
+        "success": True, 
+        "message": "(edited)", 
+        "data": data["content"]
+        }, status=201)
+    
+    # edited_content = request.POST["edited_content"]
+    # edit_post = Post.objects.filter(pk=id).update(content=edited_content, edited=True)
+    # return redirect("index")
+
+
+# def delete(request, id):
+#     if request.method != "POST":
+#         return JsonResponse({
+#             "error": "POST request required."
+#         }, status=400)
+#     try:
+#         post = Post.objects.get(pk=id)
+#         if request.user == post.poster.username:
+#             post.delete()
+#         return JsonResponse({
+#             "success": True,
+#             "message": "Post deleted"
+#         }, status=201)
+#     except:
+#         return JsonResponse({
+#             "success": False,
+#             "message": "You don't have permission to do this."
+#         }, status=403)
 
 ################################################
 
