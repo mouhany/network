@@ -11,7 +11,7 @@
     </div>
 
     <!-- Post -->
-    <div class="container border-bottom">
+    <div class="container border-bottom" id="post_id_{{ post.id }}">
         <div class="px-4 pt-3 border-bottom">
             <div class="row">
 
@@ -93,18 +93,20 @@
             </div>
             <!-- Likes -->
             <div class="px-5">
-                <i 
-                {% if user.is_authenticated and user in post.likers.all %} 
-                    class="fa-solid fa-heart text-danger" 
-                {% elif user.is_authenticated %} 
+                <span id="likes_button_{{ post.id }}" role="button" onclick="likePost({{ post.id }})">
+                    <i 
+                    {% if user.is_authenticated %} 
+                        {% if user in post.likers.all %} 
+                        class="fa-solid fa-heart text-danger" 
+                        {% endif %}
                     class="fa-regular fa-heart" 
-                {% else %} 
-                    class="fa-regular fa-heart" role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" 
-                {% endif %}
-                >
-                </i>
+                    {% else %} 
+                    class="fa-regular fa-heart" role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" {% endif %}>
+                    </i>
+                </span>
                 <span class="mx-1 text-muted">&#183;</span>
-                <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}">
+
+                <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_modal_{{ post.id }}" id="likes_number_{{ post.id }}">
                     {% if post.likers.count %}
                     {{ post.likers.count }}
                     {% else %}

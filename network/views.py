@@ -155,8 +155,8 @@ def post(request, id):
         "most_liked_posts": most_liked_posts,
         "most_commented_posts": most_commented_posts,
     })
-    
-# todo
+
+
 def like(request, id):
     # Follow must be via POST request
     if request.method != "POST":
@@ -164,13 +164,23 @@ def like(request, id):
             "error": "POST request required."
         }, status=400)
         
+    # Get current post and posts that request.user has liked
     post = Post.objects.get(pk=id)
     posts_liked = request.user.likes.all()
+    
     if post in posts_liked:
         post.likers.remove(request.user)
+        is_liked = False
     else:
         post.likers.add(request.user)
-    return redirect("index")
+        is_liked = True
+
+    num_of_likes = post.likers.count()
+    
+    return JsonResponse({
+        "is_liked": is_liked,
+        "num_of_likes": num_of_likes
+        }, status=201)
 
 
 def follow(request, user):
@@ -191,7 +201,7 @@ def follow(request, user):
         request.user.following.add(profile)
     return redirect("profile", user=profile.username)
 
-# done but need to incorporate js for better ux 
+
 def edit(request, id):
     # Edit post must be via POST request
     if request.method != "POST":
@@ -203,22 +213,21 @@ def edit(request, id):
     post = Post.objects.get(pk=id)
     
     # Get new content for current post
-    data = json.loads(request.body)
+    # "body: JSON.stringify({ content: editedContent })"
+    data = json.loads(request.body) 
     
     # Save new content to current post
+    # "body: JSON.stringify({ content: editedContent })"
     post.content = data["content"]
     post.edited = True
     post.save()
     
     return JsonResponse({
         "success": True, 
-        "message": "(edited)", 
+        "message": "Post edited.",
+        "innerText": "(edited)", 
         "data": data["content"]
         }, status=201)
-    
-    # edited_content = request.POST["edited_content"]
-    # edit_post = Post.objects.filter(pk=id).update(content=edited_content, edited=True)
-    # return redirect("index")
 
 
 # def delete(request, id):

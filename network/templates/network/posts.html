@@ -16,7 +16,7 @@
 {% else %}
 {% for post in posts %}
 <!-- Post -->
-<div class="container border-bottom post">
+<div class="container border-bottom post" id="post_id_{{ post.id }}">
     <div class="row p-4">
 
         <!-- Icon -->
@@ -56,7 +56,6 @@
             <!-- Comment and like -->
             <div class="row">
                 <div class="row">
-                    <!-- <div class="d-flex justify-content-start align-items-center"> -->
                     <!-- Comment -->
                     <div class="col">
                         <div role="button" data-mdb-toggle="modal" data-mdb-target="#comment_list_modal_{{ post.id }}">
@@ -71,16 +70,20 @@
                     </div>
                     <!-- Likes -->
                     <div class="col">
-                        <i 
-                        {% if user.is_authenticated and user in post.likers.all %}
-                        class="fa-solid fa-heart text-danger" 
-                        {% elif user.is_authenticated %}
-                        class="fa-regular fa-heart"
-                        {% else %}
-                        class="fa-regular fa-heart" role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" {% endif %}>
-                        </i>
+                        <span id="likes_button_{{ post.id }}" role="button" onclick="likePost({{ post.id }})">
+                            <i 
+                            {% if user.is_authenticated %} 
+                                {% if user in post.likers.all %} 
+                                class="fa-solid fa-heart text-danger" 
+                                {% endif %}
+                                class="fa-regular fa-heart" 
+                            {% else %} 
+                            class="fa-regular fa-heart" role="button" data-mdb-toggle="modal" data-mdb-target="#like_post_{{ post.id }}" 
+                            {% endif %}>
+                            </i>
+                        </span>
                         <span class="mx-1 text-muted">&#183;</span>
-                        <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_list_modal_{{ post.id }}">
+                        <span role="button" data-mdb-toggle="modal" data-mdb-target="#likers_list_modal_{{ post.id }}" id="likes_number_{{ post.id }}">
                             {% if post.likers.count %}
                             {{ post.likers.count }}
                             {% else %}
