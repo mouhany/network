@@ -16,7 +16,7 @@ def index(request):
     
     posts = Post.objects.all()
     
-    p = Paginator(posts, 10) # Will set to 10 posts later
+    p = Paginator(posts, 10)
     page_number = request.GET.get("page")
     page_posts = p.get_page(page_number)
     
@@ -25,7 +25,7 @@ def index(request):
         "most_liked_posts": most_liked_posts,
         "most_commented_posts": most_commented_posts,
         "posts": page_posts,
-        "page_number": page_number,
+        # "page_number": page_number,
     })
 
 
@@ -37,7 +37,7 @@ def following(request):
     followed_user = User.objects.get(username=request.user.username).following.all()
     followed_posts = Post.objects.filter(poster__in=followed_user)
     
-    p = Paginator(followed_posts, 10)  # Will set to 10 posts later
+    p = Paginator(followed_posts, 10)
     page_number = request.GET.get("page")
     followed_user_posts = p.get_page(page_number)
     
@@ -54,12 +54,9 @@ def likes(request):
     most_liked_posts = Post.most_liked_posts()
     most_commented_posts = Post.most_commented_posts()
     
-    profile = User.objects.get(username=request.user.username)
-    liked_post = profile.likes.all()
-    # Shorter ver.
-    # liked_post = User.objects.get(pk=request.user.id).likes.all()
+    liked_post = User.objects.get(username=request.user.username).likes.all()
 
-    p = Paginator(liked_post, 10)  # Will set to 10 posts later
+    p = Paginator(liked_post, 10)
     likes_page_number = request.GET.get("page")
     likes_page_posts = p.get_page(likes_page_number)
 
@@ -158,7 +155,6 @@ def post(request, id):
 
 
 def like(request, id):
-    # Follow must be via POST request
     if request.method != "POST":
         return JsonResponse({
             "error": "POST request required."
@@ -184,7 +180,6 @@ def like(request, id):
 
 
 def follow(request, user):
-    # Follow must be via POST request
     if request.method != "POST":
         return JsonResponse({
             "error": "POST request required."
@@ -195,7 +190,7 @@ def follow(request, user):
     
     if request.user.is_authenticated and profile in following_list:
         # If profile is followed by request.user,
-        # clicking on button will remove profile from following_list
+        # clicking on button will remove profile from request.user's following_list
         request.user.following.remove(profile)
     else:
         request.user.following.add(profile)
@@ -203,13 +198,11 @@ def follow(request, user):
 
 
 def edit(request, id):
-    # Edit post must be via POST request
     if request.method != "POST":
         return JsonResponse({
             "error": "POST request required."
         }, status=400)
     
-    # Get current post
     post = Post.objects.get(pk=id)
     
     # Get new content for current post

@@ -1,7 +1,7 @@
 function saveChanges(id) {
     let oldContent = document.querySelector(`#og_${id}`);
     let editInfo = document.querySelector(`#editedStatus_${id}`);
-    let editedContent = document.querySelector(`#edit_post_${id}`).value;
+    let editedContent = document.querySelector(`#edit_post_${id}`).value; // Textarea in modal
     let csrfToken = Cookies.get('csrftoken');
 
     fetch(`/edit/${id}`, {
@@ -34,12 +34,11 @@ function likePost(id) {
     })
     .then (response => response.json())
     .then(result => {
+        likeNumber.innerHTML = result.num_of_likes;
         if (result.is_liked) {
             likeButton.innerHTML = '<i class="fa-solid fa-heart text-danger"></i>';
-            likeNumber.innerHTML = result.num_of_likes;
         } else {
             likeButton.innerHTML = '<i class="fa-regular fa-heart"></i>';
-            likeNumber.innerHTML = result.num_of_likes;
         }
     });
 };
