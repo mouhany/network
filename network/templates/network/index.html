@@ -15,6 +15,10 @@
     {% include "network/posts.html" with posts=posts headline="Following" %}
     {% elif request.path == likes %}
     {% include "network/posts.html" with posts=posts headline="Likes" %}
+    {% elif request.path == login %}
+    {% include "network/login.html" %}
+    {% elif request.path == register %}
+    {% include "network/register.html" %}
     {% endif %}
 
     {% include "network/pagination.html" with posts=posts %}
