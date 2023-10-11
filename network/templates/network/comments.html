@@ -1,29 +1,36 @@
 {% load humanize %}
 
-{% if not comments %}
+
+{% if not user.is_authenticated %}
 <div class="container p-0">
-    <h5 class="text-center p-3">No comments yet.</h5>
+    <h5 class="text-center p-3">You must <a href="{% url 'login' %}">Log In</a> to view this.</h5>
 </div>
-{% endif %}
-
-{% for comment in comments %}
-<a href="{% url 'profile' user=comment.commenter.username %}">
-    <div class="col px-4 py-3 border-bottom post">
-
-            <!-- Comment: username -->
-            <span class="fw-bold text-primary">
-                {{ comment.commenter.username }}
-            </span>
-            <!-- Comment: date -->
-            <span class="small text-muted opacity-50 align-middle">
-                <span class="mx-2 align-middle">&#183;</span>
-                <span class="small align-middle">
-                    {{ comment.commented.date|date:"l, F j, Y" }}
-                </span>
-            </span>
-            <!-- Comment: comment -->
-            <div class="my-2 text-body">{{ comment.comment }}</div>
-
+{% else %} 
+    {% if not comments %}
+    <div class="container p-0">
+        <h5 class="text-center p-3">No comments yet.</h5>
     </div>
-</a>
-{% endfor %}
+    {% else%}
+        {% for comment in comments %}
+        <a href="{% url 'profile' user=comment.commenter.username %}">
+            <div class="col px-4 py-3 border-bottom post">
+
+                    <!-- Comment: username -->
+                    <span class="fw-bold text-primary">
+                        {{ comment.commenter.username }}
+                    </span>
+                    <!-- Comment: date -->
+                    <span class="small text-muted opacity-50 align-middle">
+                        <span class="mx-2 align-middle">&#183;</span>
+                        <span class="small align-middle">
+                            {{ comment.commented.date|date:"l, F j, Y" }}
+                        </span>
+                    </span>
+                    <!-- Comment: comment -->
+                    <div class="my-2 text-body">{{ comment.comment }}</div>
+
+            </div>
+        </a>
+        {% endfor %}
+    {% endif %}
+{% endif %}
